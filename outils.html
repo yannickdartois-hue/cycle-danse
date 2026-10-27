@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" sizes="32x32" href="icon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Danse">
+<meta name="theme-color" content="#a21caf">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cycle danse · outils</title>
+<link rel="stylesheet" href="eps-design.css">
+<link rel="stylesheet" href="eps-outil.css">
+<style>
+:root{--bg:#f3f5f8;--surface:#fff;--ink:#1c2128;--fg:#1c2128;--muted:#5b6470;--line:#dde2e8;--chip:#eef1f5;--accent:#a21caf;--accent-soft:#f6e8f8;--accent-fg:#fff;--warn:#c2410c;--ok:#15803d;--pD:#0e7490}
+:root[data-theme="dark"]{--bg:#0d1117;--surface:#161b22;--ink:#e6edf3;--fg:#e6edf3;--muted:#8b949e;--line:#2a313b;--chip:#21262d;--accent:#e08fea;--accent-soft:#3a1d3f;--accent-fg:#0d1117;--warn:#fb923c;--ok:#4ade80;--pD:#67c6dd}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Atkinson","Segoe UI",Roboto,Arial,sans-serif}
+header.top{max-width:1100px;margin:0 auto;padding:14px 16px 0}
+.toprow{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+header.top h1{margin:0;font:800 22px/1.15 "Archivo","Arial Narrow",Arial,sans-serif;display:flex;align-items:center}
+header.top p{margin:6px 0 0;color:var(--muted);font-size:max(14px,var(--fs-min,15px))}
+.appicon{width:40px;height:40px;border-radius:9px;margin:0 10px 0 0;box-shadow:0 1px 3px rgba(0,0,0,.25);flex:none}
+.cbtn{display:inline-flex;align-items:center;min-height:44px;border:1.5px solid var(--line);background:var(--surface);color:var(--accent);border-radius:10px;padding:6px 14px;font-weight:700;text-decoration:none;font-size:15px}
+nav#nav{max-width:1100px;margin:12px auto 0;padding:0 16px 12px;display:flex;flex-wrap:wrap;gap:6px;border-bottom:1px solid var(--line)}
+nav#nav button{border:1.5px solid var(--line);background:var(--surface);color:var(--fg);border-radius:10px;padding:8px 12px;font:600 15px "Atkinson",Arial,sans-serif;min-height:44px;cursor:pointer}
+nav#nav button.on{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+@media (max-width:700px){nav#nav{flex-wrap:nowrap;overflow-x:auto}nav#nav button{flex:none}}
+main{max-width:1100px;margin:0 auto;padding:16px}
+h2{font:800 clamp(26px,3.6vw,34px)/1.08 "Archivo","Arial Narrow",Arial,sans-serif;margin:8px 0 10px;text-wrap:balance}
+h3{font:800 21px/1.15 "Archivo","Arial Narrow",Arial,sans-serif;margin:22px 0 8px}
+h4{margin:0}
+a{color:var(--accent)}
+.small{font-size:max(14px,var(--fs-min,15px))}.muted{color:var(--muted)}
+.btn{display:inline-flex;align-items:center;gap:6px;min-height:44px;border:1.5px solid var(--accent);background:var(--accent);color:var(--accent-fg);padding:8px 14px;border-radius:10px;font:700 15px "Atkinson",Arial,sans-serif;cursor:pointer;text-decoration:none}
+.btn.ghost{background:var(--surface);border-color:var(--line);color:var(--fg)}
+.btn.mini{min-height:36px;padding:4px 10px;font-size:14px}
+.btn:disabled{opacity:.45;cursor:default}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.pill{display:inline-block;background:var(--chip);border-radius:999px;padding:3px 10px;font-size:max(13px,var(--fs-min,15px));margin:0 4px 4px 0}
+.st-faite{background:#dcfce7;color:#14532d}.st-jour{background:#fef3c7;color:#78350f}.st-eval{background:#fee2e2;color:#7f1d1d}
+.sgrid{display:grid;grid-template-columns:repeat(8,1fr);gap:6px}
+@media (max-width:760px){.sgrid{grid-template-columns:repeat(4,1fr)}}
+.sbtn{border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:8px;min-height:56px;text-align:left;cursor:pointer;font:inherit;min-width:0}
+.sbtn b{display:block;font:800 22px/1 "Archivo",Arial,sans-serif}
+.sbtn small{display:block;font-size:max(13px,var(--fs-min,15px));color:var(--muted);line-height:1.2;hyphens:auto}
+.sbtn.on{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}.sbtn.on small{color:var(--accent-fg);opacity:.85}
+.sbtn.st-faite b::after{content:" ✓";color:var(--ok)}.sbtn.st-jour b::after{content:" ●";color:var(--warn)}
+.seance{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;margin-top:10px}
+.obj{font-size:17px}
+.tl{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 4px}
+.tlb{min-width:104px;border:0;border-radius:10px;padding:8px 12px;color:#fff;font:inherit;font-size:max(14px,var(--fs-min,15px));line-height:1.25;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;text-align:left}
+.tlb b{order:-1;font:800 26px/1 "Archivo",Arial,sans-serif}
+.t-acc,.t-inst{background:#64748b}.t-ech{background:#0e7490}.t-ex{background:#a21caf}.t-sf{background:#c2410c}.t-bil{background:#334155}
+.prep{background:var(--accent-soft);border-radius:12px;padding:10px 14px;margin:10px 0}
+.prep ul{margin:6px 0 0;padding-left:20px}
+.note{background:var(--chip);border-radius:10px;padding:8px 12px}
+.fiche{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:12px 0;overflow:hidden}
+.fiche header{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.fiche header h4{flex:1;min-width:200px;font:800 22px/1.12 "Archivo",Arial,sans-serif}
+.tag{font-size:max(13px,var(--fs-min,15px));text-transform:uppercase;letter-spacing:.5px;color:var(--accent);font-weight:700}
+.dur{font-weight:700;color:var(--warn)}
+.fiche p{margin:6px 0}.fiche ol{margin:4px 0;padding-left:22px}.fiche li{margin:2px 0}
+.roles{border-left:4px solid var(--pD);padding-left:10px}
+.ok{border-left:4px solid var(--ok);padding-left:10px}
+.var{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:max(14.5px,var(--fs-min,15px))}.var p{background:var(--chip);border-radius:8px;padding:6px 10px;margin:4px 0}
+@media screen and (max-width:600px){.var{grid-template-columns:1fr}}
+.sch{float:right;width:46%;max-width:420px;margin:0 0 8px 14px}
+.sch-wide{margin-top:8px;clear:both}
+@media screen and (max-width:760px){.sch{float:none;width:100%;margin:6px 0}}
+svg{max-width:100%;height:auto}
+.tab{width:100%;border-collapse:collapse;font-size:max(14.5px,var(--fs-min,15px));margin:8px 0;background:var(--surface)}
+.tab th,.tab td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+.tab th{background:var(--chip)}
+@media screen and (max-width:760px){.tab.scroll{display:block;overflow-x:auto;max-width:100%}}
+.hero{background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--accent);border-radius:14px;padding:16px;margin:8px 0 14px}
+.hero h2{margin-top:0}
+.agrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.acard{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px;display:flex;flex-direction:column}
+.acard h3{margin:6px 0 4px;font-size:19px}.acard p{margin:4px 0}.acard .actions{margin-top:auto;padding-top:6px}
+.acard-h{display:flex;justify-content:space-between;align-items:center}.anum{font:800 28px "Archivo",Arial,sans-serif;color:var(--accent)}
+.dlist{display:flex;flex-wrap:wrap;gap:8px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:10px 0}
+.lvgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.lv{background:var(--surface);border:1px solid var(--line);border-top:6px solid var(--c);border-radius:14px;padding:12px}
+.lv h3{margin:0 0 4px;color:var(--c)}
+.pcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+.pcard{background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--c);border-radius:12px;padding:10px 12px;break-inside:avoid}
+.pcard .kino{margin:6px 0 2px;background:#fff;border-radius:10px;padding:4px}.pcard .kino svg{display:block;width:100%;height:auto}
+.pcard h4{font:800 19px "Archivo",Arial,sans-serif;display:flex;justify-content:space-between;gap:8px}
+.pcard dl{margin:6px 0 0;display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:max(14.5px,var(--fs-min,15px))}
+.pcard dt{color:var(--muted);font-weight:700}.pcard dd{margin:0}
+.pcard .secu{color:#991b1b;font-size:max(14px,var(--fs-min,15px));margin:6px 0 0}
+:root[data-theme="dark"] .pcard .secu{color:#fca5a5}
+.fd2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.fd2>div{min-width:0}.fd h4{font:800 17px "Archivo",Arial,sans-serif;margin:6px 0}.fd ul{margin:2px 0 6px;padding-left:20px}.fd li{font-size:max(15px,var(--fs-min,15px))}
+.fdimg{display:block;width:100%;max-width:640px;margin:8px auto;border-radius:8px;border:1px solid var(--line)}
+@media screen and (max-width:700px){.fd2{grid-template-columns:1fr}}
+.proc{background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--c);border-radius:12px;padding:10px 12px;margin:10px 0;break-inside:avoid}
+.proc h4{font:800 20px "Archivo",Arial,sans-serif;margin-bottom:4px}
+.proc .dz{margin-top:8px;padding:4px}
+.tir-big{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:10px 0}
+.tir-big div{background:var(--accent);color:#fff;border-radius:14px;padding:14px}
+.tir-big small{display:block;font-size:15px;opacity:.9;text-transform:uppercase;letter-spacing:.04em}
+.tir-big b{display:block;font:800 clamp(24px,4vw,36px)/1.1 "Archivo",Arial,sans-serif;margin-top:4px}
+.tir-big i{display:block;font-style:normal;margin-top:4px;font-size:15px}
+.tirtab td{min-width:120px}
+.tirtab td.vide{color:var(--muted)}
+.tirtab .rel{border:0;background:none;color:var(--accent);font-size:18px;cursor:pointer;padding:0 4px}
+.tirtab .rel:disabled{color:var(--muted);opacity:.4;cursor:default}
+.form{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin:8px 0}
+.form label{display:flex;flex-direction:column;gap:3px;font-size:max(14px,var(--fs-min,15px))}
+input,select,textarea{font:inherit;padding:8px 10px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);min-height:44px}
+textarea{width:100%;min-height:90px}
+.nt td,.nt th{text-align:center}.nt td:first-child,.nt th:first-child{text-align:left}
+.nt select{min-height:36px;padding:2px 4px}
+.nt .tot{font:800 18px "Archivo",Arial,sans-serif}
+.checks{columns:2}
+@media (max-width:520px){.checks{columns:1}}
+.pg{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;margin:12px 0}
+.lines{line-height:2.2}
+.timer{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);background:var(--ink);color:var(--bg);border-radius:14px;padding:10px 14px;display:flex;gap:12px;align-items:center;z-index:9;box-shadow:0 6px 20px rgba(0,0,0,.25);max-width:calc(100% - 32px)}
+.timer[hidden]{display:none!important}
+.timer b{font:800 30px "Archivo",Arial,sans-serif;font-variant-numeric:tabular-nums}
+.timer button{min-height:40px}
+.warnbox{background:#fef2f2;border:1px solid #fecaca;color:#7f1d1d;border-radius:12px;padding:10px 14px}
+:root[data-theme="dark"] .warnbox{background:#3a1515;border-color:#7f1d1d;color:#fecaca}
+#printzone{display:none}
+body.printmode #printzone{display:block;padding:0 8px}
+body.gym .seance h2{font-size:clamp(34px,5vw,44px)}
+body.gym .obj{font-size:19px}
+body.gym .fiche h4{font-size:30px}
+body.gym .fiche p,body.gym .fiche li{font-size:19px}
+body.gym .tlb b{font-size:34px}
+@media print{
+  @page{size:A4;margin:11mm}
+  body{background:#fff;color:#000;font-size:10pt}
+  :root{--surface:#fff;--ink:#000;--muted:#444;--line:#999;--chip:#f0f0f0;--accent-soft:#f7ecf8}
+  header.top,nav,main,.noprint,.timer{display:none!important}
+  #printzone{display:block!important}
+  .seance{border:0;padding:0;margin:0;break-before:page}
+  .seance:first-child{break-before:auto}
+  .fiche{break-inside:auto;border-color:#999;padding:8px 10px}
+  .fiche header{break-after:avoid}
+  .fiche header h4{font-size:15pt}
+  .fiche p,.fiche li{font-size:10pt}
+  .sch{width:44%;max-width:none}
+  svg,figure,.var,.ok,tr,.dz-pc,.proc,.pcard,.lv{break-inside:avoid}
+  .tlb,.t-acc,.t-inst,.t-ech,.t-ex,.t-sf,.t-bil,.tir-big div{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .tlb{min-width:80px;padding:4px 8px}.tlb b{font-size:16pt}
+  .pg{border:0;padding:0;break-after:page}
+  .pg:last-child{break-after:auto}
+  h2,h3,h4{break-after:avoid}
+  a{color:#000;text-decoration:none}
+  .pcards,.lvgrid{display:block}.pcard,.lv{margin:0 0 6px}
+  .pcard .kino{max-width:300px;float:right;margin:0 0 4px 10px}.pcard{overflow:hidden}
+  .tab{font-size:9pt}
+}
+</style>
+<script src="eps-commun.js" defer></script>
+<script>/* Ouvert depuis l’écran de cours (bouton Outils) : on ne garde que le contenu de l’outil. */
+try{if(window.self!==window.top)document.documentElement.classList.add('outil')}catch(e){document.documentElement.classList.add('outil')}</script>
+<style>html.outil body>header.top,html.outil nav#nav{display:none!important}</style>
+<style>/* Lisibilité terrain : textes à 15 px minimum à l'écran ; tailles d'origine à l'impression. */@media print{:root{--fs-min:0px}}</style>
+<link rel="stylesheet" href="eps-charte-v1.css">
+<style>/* Charte v1 — Danse : couleur de l'activité ; cycle : s=normal */
+:root{--act:#a21caf;--act-fonce:#64116c;--act-pale:#f4e4f5;--act-sombre:#cc82d3;--act-pale-sombre:#351b41;
+  --accent:#a21caf;--accent-soft:#f4e4f5;--accent-fg:#ffffff;--sport:#a21caf}
+:root[data-theme="dark"]{--accent:#cc82d3;--accent-soft:#351b41;--accent-fg:#0d1117;--sport:#cc82d3}
+</style>
+</head>
+<body>
+<header class="top"><div class="toprow"><h1><img class="appicon" src="icon-192.png" alt="" width="40" height="40">Cycle danse · CA3 · Seconde</h1><a class="cbtn" href="./">‹ Écran de cours</a></div>
+<p>Des porters et des figures dynamiques aux procédés de composition · 8 séances de 75 min · groupes de 3 à 5 · tatamis</p></header>
+<nav id="nav" aria-label="Onglets"></nav>
+<main id="main"></main>
+<div id="printzone"></div>
+<div class="timer noprint" id="timer" hidden><span id="tm-lab"></span><b id="tm-t">00:00</b><button class="btn mini ghost" id="tm-close" type="button">Arrêter</button></div>
+<script src="danse-donnees.js"></script>
+<script>
+'use strict';
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const LS = {
+  get(k, d){ try{ const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+};
+const PDF = id => `pdf/2de-danse-${id}.pdf`;
+
+/* ---------- Fiches et séances ---------- */
+function ficheHTML(f, n){
+  const wide = /^(porters|proc|frise|focales)/.test(f.schema || "");
+  const sch = f.schema ? `<div class="${wide ? "sch-wide" : "sch"}">${schema(f.schema)}</div>` : "";
+  const v = (f.moins || f.plus) ? `<div class="var">${f.moins ? `<p><b>−</b> ${esc(f.moins)}</p>` : ""}${f.plus ? `<p><b>+</b> ${esc(f.plus)}</p>` : ""}</div>` : "";
+  return `<article class="fiche">
+  <header><span class="tag">${esc(f.cat)}</span><h4>${n ? n + ". " : ""}${esc(f.titre)}</h4><span class="dur">${f.duree} min</span></header>
+  ${wide ? "" : sch}
+  <p><b>Dispositif.</b> ${esc(f.dispo)}</p>
+  <p class="roles"><b>Rôle de chacun.</b> ${esc(f.roles)}</p>
+  <p><b>Déroulement.</b></p><ol>${f.deroul.map(d => `<li>${esc(d)}</li>`).join("")}</ol>
+  <p><b>Consignes et critères de réalisation.</b> ${esc(f.crit)}</p>
+  <p class="ok"><b>Critère de réussite.</b> ${esc(f.reussite)}</p>
+  ${v}${wide ? sch : ""}
+  </article>`;
+}
+function statut(i){
+  const today = LS.get("danse2de_jour", -1);
+  if(i >= 6 && today !== i) return ["eval", "Évaluation"];
+  if(today < 0) return ["avenir", "À venir"];
+  if(i < today) return ["faite", "Faite"];
+  if(i === today) return ["jour", "Aujourd’hui"];
+  return ["avenir", "À venir"];
+}
+const PASS_TXT = {ensemble:"Passage : plusieurs groupes ensemble", jumeles:"Passage : groupes jumelés", classe:"Passage : seul devant la classe"};
+function seanceHTML(i, forPrint){
+  const S = SEANCES[i], st = statut(i);
+  const frise = `<div class="tl">` + S.tl.map(b => `<button type="button" class="tlb t-${b[2]}" style="flex:${b[1]}" data-min="${b[1]}" data-lab="${esc(b[0])}" title="Minuteur de ${b[1]} min"><span>${esc(b[0])}</span><b>${b[1]}′</b></button>`).join("") + `</div>`;
+  const tot = S.tl.reduce((a, b) => a + b[1], 0);
+  let h = `<section class="seance" id="sea-${S.id}">
+  <div><span class="pill st-${st[0]}">${st[1]}</span><span class="pill">${PASS_TXT[S.passage]}</span>${S.tirage ? `<span class="pill">Tirage au sort ${S.tirage}</span>` : ""}${S.porters.length ? `<span class="pill">Porters : ${S.porters.join(", ")}</span>` : ""}</div>
+  <h2>${S.id} · ${esc(S.titre)}</h2>
+  <p class="obj"><b>Objectif.</b> ${esc(S.obj)}</p>
+  ${frise}<p class="small muted">${tot} min de pratique.</p>
+  <div class="prep"><b>Ce que la séance prépare pour l’évaluation</b><ul>${S.prepare.map(p => `<li>${esc(p)}</li>`).join("")}</ul></div>`;
+  if(S.install) h += `<p class="note"><b>Installation et sécurité.</b> ${esc(S.install)}</p>`;
+  S.fiches.forEach((f, k) => h += ficheHTML(f, k + 1));
+  if(S.videos && S.videos.length) h += `<p class="note"><b>Vidéos de la séance.</b> ${S.videos.map(v => `<a href="${esc(v[1])}" target="_blank" rel="noopener">${esc(v[0])}</a>`).join(" · ")}</p>`;
+  if(S.bilan) h += `<p class="note"><b>À retenir au bilan.</b> ${esc(S.bilan)}</p>`;
+  if(!forPrint) h += `<div class="actions noprint"><button class="btn" type="button" data-today="${i}">Marquer comme séance du jour</button><button class="btn ghost" type="button" data-print="${S.id}">Imprimer cette séance</button><a class="btn ghost" href="${PDF(S.id)}">PDF</a>${S.tirage ? `<button class="btn ghost" type="button" data-tab="tirage">Ouvrir le tirage</button>` : ""}</div>`;
+  return h + `</section>`;
+}
+
+/* ---------- Vues ---------- */
+const VIEWS = {};
+let curSeance = Math.max(0, LS.get("danse2de_jour", 0));
+VIEWS.accueil = () => {
+  const cards = SEANCES.map((S, i) => { const st = statut(i); const ex = S.fiches.filter(f => !/^(Échauffement|Bilan)/.test(f.cat)).map(f => esc(f.titre));
+    return `<article class="acard"><div class="acard-h"><span class="anum">${S.id}</span><span class="pill st-${st[0]}">${st[1]}</span></div>
+    <h3>${esc(S.titre)}</h3><p>${esc(S.obj)}</p><p class="small muted">${PASS_TXT[S.passage]}${S.tirage ? " · tirage au sort" : ""}</p><p class="small muted">Au programme : ${ex.join(" · ")}</p>
+    <div class="actions"><button class="btn" type="button" data-open-s="${i}">Voir la séance</button><a class="btn ghost" href="${PDF(S.id)}">PDF</a></div></article>`; }).join("");
+  return `<section class="hero"><h2>Cycle danse · CA3 · Seconde</h2>
+  <p>On part des porters (à deux, puis à 3 ou 4) pour arriver aux procédés de composition : unisson, miroir, cascade, canon, question-réponse, accumulation, lâcher-rattraper. Chaque séance finit par une présentation. À partir de S4, chaque groupe tire au sort un thème et des contraintes. Les élèves jouent sur l’effet produit chez le spectateur : émotion, rire, spectaculaire, danger.</p>
+  <p class="small muted">Passages : plusieurs groupes ensemble en S1 et S2 ; groupes jumelés de S3 à S6 ; seul devant la classe en S7 et S8 (évaluation).</p>
+  <div class="actions"><a class="btn" href="${PDF("cycle-complet")}">Cycle complet (PDF)</a><button class="btn ghost" type="button" data-print="cycle">Imprimer le cycle</button><button class="btn ghost" type="button" data-tab="tirage">Tirage au sort</button></div></section>
+  <div class="agrid">${cards}</div>
+  <h3>Documents à imprimer</h3>
+  <div class="dlist">${[["Répertoire des porters","porters"],["Procédés de composition","procedes"],["Fiche projet de groupe","projet"],["Fiche spectateur-lecteur","spectateur"],["Échauffement autonome","echauffement"],["Règles de sécurité","securite"],["Grille d’évaluation","evaluation"],["Contrats tirés au sort","tirages"],["Banque de situations","banque"],["Figures dynamiques (code A à D)","figdyn"]].map(d => `<span><button class="btn ghost mini" type="button" data-print="${d[1]}">${d[0]}</button> <a class="small" href="${PDF(d[1])}">PDF</a></span>`).join("")}</div>`;
+};
+VIEWS.seances = () => {
+  const btns = SEANCES.map((S, i) => { const st = statut(i); return `<button type="button" class="sbtn ${i === curSeance ? "on" : ""} st-${st[0]}" data-s="${i}"><b>${S.id}</b><small>${esc(S.titre.split(/ : | — |,/)[0])}</small></button>`; }).join("");
+  return `<div class="sgrid noprint">${btns}</div>
+  <div class="actions noprint"><button class="btn ghost mini" type="button" data-print="cycle">Imprimer le cycle complet</button><a class="btn ghost mini" href="${PDF("cycle-complet")}">PDF du cycle</a></div>
+  ${seanceHTML(curSeance)}`;
+};
+function porterFull(p){
+  const n = NIVEAUX_P[p.niv];
+  const voir = [VOIR.boguta].concat(p.src === "normandie" ? [VOIR.normandie] : []);
+  return `<article class="pcard" style="--c:${n.c}"><h4><span>${p.id} · ${esc(p.nom)}</span><span class="pill">${p.nb} élèves</span></h4>
+  <div class="kino">${svgKino(p.id)}</div>
+  <dl><dt>Entrée</dt><dd>${esc(p.entree)}</dd><dt>Porté</dt><dd>${esc(p.porte)}</dd><dt>Sortie</dt><dd>${esc(p.sortie)}</dd><dt>Variante</dt><dd>${esc(p.dyn)}</dd></dl>
+  <p class="secu">⚠ ${esc(p.secu)}</p><p class="small noprint"><b>Voir en photo ou en vidéo :</b> ${voir.map(v => `<a href="${esc(v[1])}" target="_blank" rel="noopener">${esc(v[0])}</a>`).join(" · ")}</p><p class="small muted">Sert surtout : ${p.lev.map(l => LEVIERS.find(x => x.id === l).nom).join(", ")} · ${SEANCES.filter(s => s.porters.includes(p.id)).map(s => s.id).join(", ") || "banque"}</p></article>`;
+}
+VIEWS.porters = () => {
+  let h = `<h2>Répertoire des porters</h2>
+  <p>22 porters en 4 niveaux, dont 5 figures dynamiques de l’académie de Normandie (P18 à P22) reprises en version dansée. Chacun a son kinogramme et est décrit comme en danse : une <b>entrée</b> en mouvement, un <b>porté</b>, une <b>sortie</b> qui relance. La figure d’acrosport tenue n’est qu’un cas particulier : l’arrêt sur image.</p>
+  <p class="warnbox"><b>Niveau 4 :</b> seulement après validation du professeur, avec un pareur. Jamais au-dessus des épaules du porteur.</p>
+  <p class="small"><span style="color:#0e7490;font-weight:700">● porteur</span> · <span style="color:#a21caf;font-weight:700">● voltigeur</span> · <span style="color:#64748b;font-weight:700">● pareur</span>. Photos et vidéos : <a href="${esc(VOIR.boguta[1])}" target="_blank" rel="noopener">diaporama des portés de G. Boguta</a> (PowerPoint, environ 180 Mo, avec vidéos au ralenti) · <a href="${esc(VOIR.normandie[1])}" target="_blank" rel="noopener">figures dynamiques de Normandie</a>.</p>
+  <div class="actions noprint"><button class="btn ghost" type="button" data-print="porters">Imprimer le répertoire</button><a class="btn ghost" href="${PDF("porters")}">PDF</a></div>`;
+  h += `<h3>Planches de figures (document de séance)</h3><div class="pcards">${["figures-deux","elements-dynamiques"].map(imgHTML).join("")}</div>`;
+  [1,2,3,4].forEach(n => { h += `<h3 style="color:${NIVEAUX_P[n].c}">${esc(NIVEAUX_P[n].nom)}</h3><div class="pcards">${PORTERS.filter(p => p.niv === n).map(porterFull).join("")}</div>`; });
+  h += `<h3>Liens avec les figures dynamiques d’acrosport</h3><p>Les montages et démontages dynamiques de l’acrosport (entrer dans la figure en mouvement, en sortir par une roulade ou un saut) sont exactement le passage du porter tenu au porter dansé. Les kinogrammes de P. Messin et la page du blog bjerome (onglet Sources) donnent d’autres figures : on les fait entrer dans ce répertoire en écrivant leur entrée et leur sortie.</p>`;
+  return h;
+};
+const RISQ = {"":["Sans renversement",""],atr:["Passage à l’ATR : avec aide au début","st-jour"],rot:["Rotation arrière : réservé","st-eval"]};
+function figdynCarte(f, print){
+  const L = (titre, a) => `<div><b class="small">${titre}</b><ul>${a.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>`;
+  return `<article class="card fd"><h3 style="margin-top:0">${f.id} · ${esc(f.nom)} <span class="pill">${f.nb} élèves</span><span class="pill ${RISQ[f.risque][1]}">${RISQ[f.risque][0]}</span></h3>
+  ${print ? "" : `<details class="noprint"><summary>Voir la fiche d’origine (kinogramme et photos des prises)</summary><img class="fdimg" src="img/fd-${f.id}.jpg" alt="Fiche ${f.id} ${esc(f.nom)}" loading="lazy"></details>`}
+  <div class="fd2"><div><h4>Critères de réalisation</h4>${L("Porteur", f.p)}${L("Voltigeur", f.v)}</div><div><h4>Conduites typiques (ce que le juge repère)</h4>${L("Porteur", f.cp)}${L("Voltigeur", f.cv)}</div></div></article>`;
+}
+function figdynHTML(print){
+  return `<h2>Figures dynamiques : code A à D</h2>
+  <p>Code de figures dynamiques et fiches détaillées de la formation acrosport d’E. Courtelarre. Le code classe les figures en 4 niveaux (A à D) ; les fiches donnent les prises, les critères de réalisation et les conduites typiques du porteur et du voltigeur. Les conduites typiques servent de grille d’observation aux juges.</p>
+  <p class="warnbox"><b>En Seconde.</b> Les renversements et redressements de l’ATR se font avec aide et parade au début. Les rotations arrière (C3 salto arrière, D3 flip arrière, D4 salto arrière prise carrée) dépassent la règle du cycle : réservées aux élèves gymnastes, avec la parade du professeur, et seulement après validation. Elles n’entrent pas dans les chorégraphies sans cet accord.</p>
+  ${print ? "" : `<div class="actions noprint"><button class="btn ghost" type="button" data-print="figdyn">Imprimer les fiches</button><a class="btn ghost" href="${PDF("figdyn")}">PDF</a></div>`}
+  <h3>Le code (niveaux A à D)</h3><div class="pcards">${["code-ab","code-cd"].map(n => `<figure class="dz dz-img"><img src="img/fd-${n}.jpg" alt="Code des figures dynamiques, ${n === "code-ab" ? "niveaux A et B" : "niveaux C et D"}" loading="lazy"><figcaption class="cap">${n === "code-ab" ? "Niveaux A et B" : "Niveaux C et D"}</figcaption></figure>`).join("")}</div>
+  ${["B","C","D"].map(n => `<h3>Niveau ${n}</h3>${FIGDYN.filter(f => f.id[0] === n).map(f => figdynCarte(f, print)).join("")}`).join("")}`;
+}
+VIEWS.figdyn = () => figdynHTML(false);
+VIEWS.procedes = () => {
+  let h = `<h2>Procédés de composition</h2><p>Chaque procédé est montré sur une frise : une ligne par danseur, le temps de gauche à droite. Pour chacun : comment l’utiliser avec un porter.</p>
+  <div class="actions noprint"><button class="btn ghost" type="button" data-print="procedes">Imprimer les procédés</button><a class="btn ghost" href="${PDF("procedes")}">PDF</a></div>`;
+  Object.keys(FAMILLES_PROC).forEach(fk => {
+    const L = PROCEDES.filter(p => p.fam === fk); if(!L.length) return;
+    h += `<h3 style="color:${FAMILLES_PROC[fk].c}">${esc(FAMILLES_PROC[fk].nom)}</h3>`;
+    L.forEach(p => { const sv = PROC_DESSIN[p.id] ? svgProc(p.id) : ""; h += `<article class="proc" style="--c:${FAMILLES_PROC[fk].c}"><h4>${esc(p.nom)}</h4><p>${esc(p.def)}</p><p><b>Avec un porter.</b> ${esc(p.porter)}</p><p class="small muted"><b>Piège.</b> ${esc(p.piege)}</p>${sv ? `<div class="dz">${sv}</div>` : ""}${p.id === "niveaux" ? svgScene("espace") : ""}</article>`; });
+  });
+  h += `<h3>Les verbes d’action</h3><p>La grille du lycée demande au moins 4 verbes différents. Exemples : ${VERBES.map(esc).join(" · ")}.</p>`;
+  h += `<h3>Les composantes du mouvement</h3><table class="tab scroll"><tr><th>Espace</th><td>Niveaux (sol, moyen, haut), directions, trajets, orientation par rapport au public, proche / loin.</td></tr><tr><th>Temps</th><td>Vitesse, accélération, ralenti, arrêt, rythme, rapport à la musique (sur le temps, à contretemps).</td></tr><tr><th>Énergie</th><td>Lourd / léger, continu / saccadé, tonique / relâché.</td></tr><tr><th>Relation</th><td>Avec les partenaires (contact, regard, porter, unisson, décalage) et avec le public.</td></tr></table>`;
+  return h;
+};
+VIEWS.leviers = () => `<h2>Les focales : l’effet sur le spectateur</h2><p>Une focale, c’est ce que le groupe veut faire ressentir au public. Le même porter peut servir les quatre : on change l’énergie, la vitesse et le regard, pas la figure.</p>
+  <div class="lvgrid">${LEVIERS.map(l => `<article class="lv" style="--c:${l.c}"><h3>${esc(l.nom)}</h3><p>${esc(l.but)}</p><ul>${l.moyens.map(m => `<li>${esc(m)}</li>`).join("")}</ul><p class="small"><b>Porters qui le servent :</b> ${l.porters.map(id => `${id} ${esc(porterById(id).nom)}`).join(", ")}</p><p class="small muted"><b>Piège.</b> ${esc(l.piege)}</p></article>`).join("")}</div>
+  <p class="warnbox"><b>Danger = illusion.</b> Ce que le public croit dangereux doit être facile pour le groupe : chute rattrapée de 20 à 45°, porteur placé avant, réussite à 100 % à l’entraînement. Un groupe qui ne le maîtrise pas choisit un autre focale.</p>`;
+
+/* ---------- Tirage au sort ---------- */
+const TK = "danse2de_tirages";
+function tirState(){ const s = LS.get(TK, null); if(s && s.classes) return s; return {cur:"Classe 1", nb:8, classes:{"Classe 1":{}}}; }
+function tirSave(s){ LS.set(TK, s); }
+const ETAPES = [["theme","Thème","S4"],["procede","Procédé imposé","S4"],["levier","Focale dominante","S4"],["espace","Contrainte d’espace","S5"],["porter","Porter imposé","S5"],["temps","Contrainte de temps","S6"]];
+const listeDe = k => k === "theme" ? THEMES.map(t => t.t) : CONTRAINTES[k].l;
+function tirer(cl, g, k){
+  const L = listeDe(k), pris = Object.values(cl).map(x => x && x[k]).filter(v => v != null);
+  let libres = L.map((_, i) => i).filter(i => !pris.includes(i) && !(cl[g] && cl[g][k] === i));
+  if(!libres.length) libres = L.map((_, i) => i).filter(i => !(cl[g] && cl[g][k] === i));
+  cl[g] = cl[g] || {}; cl[g][k] = libres[Math.floor(Math.random() * libres.length)];
+}
+let dernier = null;
+function valeur(k, i){ if(i == null) return ""; return k === "theme" ? THEMES[i].t : CONTRAINTES[k].l[i]; }
+VIEWS.tirage = () => {
+  const s = tirState(), cl = s.classes[s.cur] || (s.classes[s.cur] = {});
+  const G = Array.from({length: s.nb}, (_, i) => "G" + (i + 1));
+  const big = dernier && cl[dernier] ? `<div class="tir-big">${ETAPES.filter(e => cl[dernier][e[0]] != null).map(e => `<div><small>${dernier}${cl[dernier].nom ? " · " + esc(cl[dernier].nom) : ""} · ${e[1]}</small><b>${esc(valeur(e[0], cl[dernier][e[0]]))}</b>${e[0] === "theme" ? `<i>${esc(THEMES[cl[dernier].theme].arg)}</i>` : ""}</div>`).join("")}</div>` : "";
+  const ligne = g => { const x = cl[g] || {};
+    return `<tr><th><input aria-label="Nom du groupe ${g}" data-gnom="${g}" value="${esc(x.nom || "")}" placeholder="${g}" style="width:110px"></th>${ETAPES.map(e => x[e[0]] == null
+      ? `<td class="vide"><button class="btn mini ghost" type="button" data-tire="${g}|${e[0]}">Tirer</button></td>`
+      : `<td>${esc(valeur(e[0], x[e[0]]))}${e[0] === "theme" ? `<br><span class="small muted">${esc(THEMES[x.theme].arg)} (focale suggérée : ${esc(LEVIERS.find(l => l.id === THEMES[x.theme].lev).nom)})</span>` : ""} <button class="rel noprint" type="button" title="Joker : relancer (une fois par groupe)" data-joker="${g}|${e[0]}" ${x.joker ? "disabled" : ""}>↻</button></td>`).join("")}<td>${x.joker ? "utilisé" : "disponible"}</td></tr>`; };
+  return `<h2>Tirage au sort</h2>
+  <p>S4 : thème, procédé imposé, focale dominante. S5 : contrainte d’espace et porter imposé. S6 : contrainte de temps. Deux groupes d’une même classe n’ont pas le même thème tant que la liste le permet. Un joker par groupe pour tout le cycle (↻). Les tirages restent sur cet appareil.</p>
+  <div class="form noprint"><label>Classe <select id="tir-cl">${Object.keys(s.classes).map(c => `<option ${c === s.cur ? "selected" : ""}>${esc(c)}</option>`).join("")}</select></label>
+  <button class="btn ghost mini" type="button" id="tir-add">Nouvelle classe</button><button class="btn ghost mini" type="button" id="tir-ren">Renommer</button>
+  <label>Nombre de groupes <select id="tir-nb">${[5,6,7,8,9,10].map(n => `<option ${n === s.nb ? "selected" : ""}>${n}</option>`).join("")}</select></label></div>
+  <div class="actions noprint">${["S4","S5","S6"].map(e => `<button class="btn" type="button" data-tous="${e}">Tirer ${e} pour tous les groupes</button>`).join("")}<button class="btn ghost" type="button" data-print="tirages">Imprimer les contrats</button><button class="btn ghost" type="button" id="tir-raz">Effacer cette classe</button></div>
+  ${big}
+  <table class="tab scroll tirtab"><tr><th>Groupe</th>${ETAPES.map(e => `<th>${e[1]} <span class="small muted">${e[2]}</span></th>`).join("")}<th>Joker</th></tr>${G.map(ligne).join("")}</table>`;
+};
+function contratHTML(g, x, cl){
+  const v = k => x && x[k] != null ? esc(valeur(k, x[k])) : "……………………………";
+  return `<div class="pg"><h2>Contrat de composition · ${g}${x && x.nom ? " · " + esc(x.nom) : ""}</h2><p class="small">Classe : ${esc(cl)} · Cycle danse CA3 Seconde</p>
+  <table class="tab"><tr><th>Thème (S4)</th><td>${v("theme")}${x && x.theme != null ? ` — ${esc(THEMES[x.theme].arg)}` : ""}</td></tr><tr><th>Procédé imposé (S4)</th><td>${v("procede")}</td></tr><tr><th>Focale dominante (S4)</th><td>${v("focale")}</td></tr><tr><th>Contrainte d’espace (S5)</th><td>${v("espace")}</td></tr><tr><th>Porter imposé (S5)</th><td>${v("porter")}</td></tr><tr><th>Contrainte de temps (S6)</th><td>${v("temps")}</td></tr></table>
+  ${projetCorps()}</div>`;
+}
+function projetCorps(){
+  return `<table class="tab"><tr><th style="width:28%">Titre</th><td class="lines">&nbsp;</td></tr><tr><th>Argument (« c’est l’histoire de… »)</th><td class="lines">&nbsp;<br>&nbsp;</td></tr><tr><th>Musique (ou silence)</th><td class="lines">&nbsp;</td></tr>
+  <tr><th>Début (installer)</th><td class="lines">&nbsp;<br>&nbsp;</td></tr><tr><th>Verbes d’action (au moins 4 différents)</th><td class="lines">&nbsp;</td></tr><tr><th>Développement : procédés (au moins 3 dont l’imposé)</th><td class="lines">1.<br>2.<br>3.</td></tr><tr><th>Porters (au moins 2 dont l’imposé)</th><td class="lines">1.<br>2.</td></tr></table>
+  <table class="tab"><tr><th colspan="5">Figures, dans l’ordre de passage : chaque élève est évalué sur 4 figures, dans au moins 2 rôles</th></tr><tr><th style="width:8%">N°</th><th>Figure (nom ou code : P4, B1…)</th><th style="width:16%">Difficulté (niveau 1 à 4 ou A à D)</th><th>Porteur(s)</th><th>Voltigeur · pareur</th></tr>${[1,2,3,4,5,6,7,8].map(n => `<tr><td>${n}</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>`).join("")}</table>
+  <table class="tab"><tr><th style="width:28%">Moment fort (la focale au maximum)</th><td class="lines">&nbsp;</td></tr><tr><th>Fin (fixer)</th><td class="lines">&nbsp;</td></tr>
+  <tr><th>Conseils reçus et corrections (S5, S6, S7)</th><td class="lines">&nbsp;<br>&nbsp;<br>&nbsp;</td></tr><tr><th>Élèves du groupe</th><td class="lines">&nbsp;<br>&nbsp;</td></tr></table>
+  <table class="tab"><tr><th>Schéma de la prestation : trajets, orientation, position du public (dessiner)</th></tr><tr><td style="height:220px">&nbsp;</td></tr></table>`;
+}
+VIEWS.passages = () => `<h2>Les passages devant le public</h2><p>Chaque séance finit par une présentation. Le regard des autres s’apprend progressivement : on n’est jamais seul devant toute la classe avant l’évaluation.</p>
+  ${["ensemble","jumeles","classe"].map(k => `<div class="card"><h3 style="margin-top:0">${esc(PASSAGES[k].nom)} <span class="pill">${PASSAGES[k].seances}</span></h3><p>${esc(PASSAGES[k].txt)}</p>${svgScene(k === "ensemble" ? "vagues3" : k === "jumeles" ? "jumeles" : "seul")}</div>`).join("")}
+  <h3>Règles du public</h3><ul><li>Silence complet pendant un passage ; on applaudit chaque groupe.</li><li>On commente ce qui a marché avant ce qui a raté.</li><li>Un retour = un point fort + un conseil précis (« le canon se perd après le porter »).</li><li>Personne ne filme sans l’accord du groupe.</li></ul>
+  <h3>Fiche du spectateur-lecteur</h3><div class="actions noprint"><button class="btn ghost" type="button" data-print="spectateur">Imprimer la fiche</button><a class="btn ghost" href="${PDF("spectateur")}">PDF</a></div>${specHTML()}`;
+function specHTML(){
+  return `<table class="tab"><tr><th style="width:30%">Groupe observé · titre</th><td class="lines">&nbsp;</td></tr><tr><th>Procédés vus (où ?)</th><td>□ unisson □ miroir □ cascade □ canon □ question-réponse □ accumulation □ lâcher-rattraper □ contrepoint □ arrêt sur image □ autre : ……</td></tr>
+  <tr><th>La focale ressentie</th><td>□ émotion □ rire □ spectaculaire □ danger — à quel moment ? ……………………</td></tr><tr><th>Espace</th><td>□ face au public □ diagonale □ niveaux □ trajets — le moment le plus fort était en : □ avant-scène □ milieu □ fond</td></tr>
+  <tr><th>Porters dansés ?</th><td>□ on voit la préparation □ entrée ou sortie liée □ entrée et sortie en mouvement</td></tr><tr><th>Interprétation</th><td>□ regards au sol □ engagement par moments □ présence continue □ immobilités tenues</td></tr>
+  <tr><th>Point fort</th><td class="lines">&nbsp;</td></tr><tr><th>Un conseil précis</th><td class="lines">&nbsp;</td></tr></table>`;
+}
+function echHTML(){
+  return `<table class="tab"><tr><th>Phase</th><th>Contenu</th><th>Durée</th></tr>${ECHAUFF.phases.map(p => `<tr><td>${esc(p[0])}</td><td>${esc(p[1])}</td><td>${esc(p[2])}</td></tr>`).join("")}</table>
+  <p><b>Celui qui coche :</b></p><ol class="checks">${ECHAUFF.checks.map(c => `<li>□ ${esc(c)}</li>`).join("")}</ol><p><b>Règle.</b> ${esc(ECHAUFF.regle)}</p>`;
+}
+VIEWS.echauff = () => `<h2>Échauffements</h2>
+  <h3>Échauffement guidé (S1 à S4)</h3><ol><li>Marche dans l’espace, arrêts sur signal, changements de vitesse et d’énergie.</li><li>Mobilisation articulaire en marchant : chevilles, genoux, hanches, épaules, nuque.</li><li>Gainage : planches ventrale, dorsale, latérales ; « corps en planche » soulevé par les pieds.</li><li>Contact : paumes contre paumes, dos à dos, petite danse.</li><li>Rappel du travail de la séance précédente.</li></ol>
+  <p class="small muted">Les gainages sont la base de la sécurité : un voltigeur mou est deux fois plus lourd, un porteur qui se cambre se blesse.</p>
+  <h3>Banque d’échauffement à deux (séance 1 du professeur)</h3>
+  <table class="tab scroll"><tr><th>Partie</th><th>Exercices</th></tr>
+  <tr><td>Course et réactions</td><td>A court, B suit, déplacements changés toutes les 5 s · au top, saisie aux coudes, descendre et remonter · au top, B monte sur le dos de A · saut et arrêt pile, puis sans bruit · Jacques a dit : 6, 5, 4 appuis au sol.</td></tr>
+  <tr><td>Traversées</td><td>Marche de l’éléphant · sur le dos · brouette · roulade avant · déménageur à 3 · roulade avant à 2 · ATR · saute-mouton.</td></tr>
+  <tr><td>Opposition</td><td>Combat de coqs · face à face, combat de coqs en essayant de passer devant ses mains · face à face, bataille de main droite.</td></tr>
+  <tr><td>Renforcement à deux</td><td>Pompes en appui sur un porteur au sol · dips en appui sur le genou d’un porteur allongé, genou haut · squat avec porteur au sol qui pousse · hip thrust sur porteur en gainage · porteur à 4 pattes : B saute par-dessus et passe en dessous.</td></tr>
+  <tr><td>Articulaire</td><td>Culbuto · enroulement arrière · poignets à deux (A à genoux, B pousse et s’appuie) · cervicales (A pousse, B résiste).</td></tr>
+  <tr><td>Échauffement des porters</td><td>Au top, A s’allonge, B s’allonge sur son dos, puis on renverse · A en boule, B épouse la boule dos contre dos · A à 4 pattes, B s’allonge dessus.</td></tr></table>
+  <div class="pcards">${["figures-deux","contrepoids","echauffement-banc","echauffement-banc-2"].map(imgHTML).join("")}</div>
+  <h3>Échauffement autonome de groupe (S5 à S8)</h3><div class="actions noprint"><button class="btn ghost" type="button" data-print="echauffement">Imprimer la fiche</button><a class="btn ghost" href="${PDF("echauffement")}">PDF</a></div>${echHTML()}`;
+function secuHTML(){
+  return `<h3>Tenue</h3><ul>${SECU.tenue.map(x => `<li>${esc(x)}</li>`).join("")}</ul>
+  <h3>Les règles des porters</h3><ol>${SECU.regles.map(x => `<li>${esc(x)}</li>`).join("")}</ol>
+  <h3>Les prises</h3><table class="tab">${SECU.prises.map(p => `<tr><th>${esc(p[0])}</th><td>${esc(p[1])}</td></tr>`).join("")}</table>
+  <h3>Les rôles</h3><table class="tab">${SECU.roles.map(p => `<tr><th>${esc(p[0])}</th><td>${esc(p[1])}</td></tr>`).join("")}</table>`;
+}
+VIEWS.securite = () => `<h2>Sécurité</h2><p>À afficher et à lire en S1, à rappeler à chaque installation. Les règles sont celles de l’acrosport (piliers, porter en 4 temps, parade), appliquées à des porters en mouvement.</p>
+  <div class="actions noprint"><button class="btn ghost" type="button" data-print="securite">Imprimer</button><a class="btn ghost" href="${PDF("securite")}">PDF</a></div>${secuHTML()}`;
+VIEWS.banque = () => `<h2>Banque de situations</h2><p>Quatre situations par catégorie, pour remplacer un exercice qui ne marche pas ou relancer un groupe. N1 = facile, N3 = exigeant.</p>
+  <div class="actions noprint"><button class="btn ghost" type="button" data-print="banque">Imprimer la banque</button><a class="btn ghost" href="${PDF("banque")}">PDF</a></div>
+  ${BANQUE.map(c => `<h3>${esc(c.cat)}</h3><div class="agrid">${c.items.map(it => `<article class="acard"><div class="acard-h"><b>${esc(it.t)}</b><span class="pill">${it.niv}</span></div><p>${esc(it.txt)}</p><p class="small muted">${esc(it.rem)}</p></article>`).join("")}</div>`).join("")}`;
+VIEWS.diff = () => `<h2>Différenciation</h2>${DIFF.map(d => `<div class="card"><h3 style="margin-top:0">${esc(d.cas)}</h3><ul>${d.reponse.map(r => `<li>${esc(r)}</li>`).join("")}</ul></div>`).join("")}`;
+function evalHTML(){
+  return `<p><b>Organisation.</b> ${esc(EVAL.regle)}</p>
+  <h3>AFL1 · S’engager pour composer et interpréter une chorégraphie collective (12 pts)</h3>
+  <table class="tab scroll"><tr><th>Élément</th><th>Note</th><th>Degré 1</th><th>Degré 2</th><th>Degré 3</th><th>Degré 4</th></tr>${EVAL.afl1.map(e => `<tr><th>${esc(e.el)}<br><span class="small muted">${e.qui === "groupe" ? "note du groupe" : "note de l’élève"}</span></th><td>/${e.pts}</td>${e.rep.map(r => `<td>${esc(r)}</td>`).join("")}${"<td></td>".repeat(Math.max(0, 4 - e.rep.length))}</tr>`).join("")}</table>
+  <h3>AFL2 · ${esc(EVAL.afl2.titre)} (${EVAL.afl2.pts} pts)</h3><table class="tab scroll"><tr>${EVAL.afl2.deg.map(d => `<th>${esc(d[0])} · ${String(d[1]).replace(".", ",")}</th>`).join("")}</tr><tr>${EVAL.afl2.deg.map(d => `<td>${esc(d[2])}</td>`).join("")}</tr></table>
+  <h3>AFL3 · ${esc(EVAL.afl3.titre)} (${EVAL.afl3.pts} pts)</h3><table class="tab scroll"><tr>${EVAL.afl3.deg.map(d => `<th>${esc(d[0])} · ${String(d[1]).replace(".", ",")}</th>`).join("")}</tr><tr>${EVAL.afl3.deg.map(d => `<td>${esc(d[2])}</td>`).join("")}</tr></table>`;
+}
+VIEWS.eval = () => `<h2>Évaluation · /20</h2><p class="warnbox">Proposition à valider en équipe : la Seconde n’a pas de référentiel de CCF. Format inspiré des épreuves de danse collective (3 à 5 danseurs, 1 min 30 à 2 min, titre et argument, spectateurs-lecteurs).</p>
+  <div class="actions noprint"><button class="btn ghost" type="button" data-print="evaluation">Imprimer la grille</button><a class="btn ghost" href="${PDF("evaluation")}">PDF</a><button class="btn" type="button" data-tab="notation">Saisir les notes</button></div>
+  ${evalHTML()}
+  <h3>Grille de l’équipe : dimension artistique (Composer)</h3>${imgHTML("grille-dimension-artistique")}
+  <h3>Lien avec le cycle</h3><table class="tab scroll"><tr><th>Élément</th><th>Préparé en</th><th>Statut</th></tr>${EVAL.lien.map(l => `<tr><td>${esc(l[0])}</td><td>${esc(l[1])}</td><td>${/S4 à S6|S5 à S8/.test(l[1]) ? "à surveiller : peu de séances" : "ok"}</td></tr>`).join("")}</table>`;
+
+/* ---------- Notation (reste sur l'appareil) ---------- */
+const NK = "danse2de_notes";
+function notState(){ const s = LS.get(NK, null); return s && s.classes ? s : {cur:"Classe 1", classes:{"Classe 1":{eleves:[], grp:{}, el:{}}}}; }
+function notSave(s){ LS.set(NK, s); }
+const COMP = EVAL.afl1.filter(e => e.qui === "groupe"), INTERP = EVAL.afl1.filter(e => e.qui === "élève");
+const VALS = e => e.rep.map(r => parseFloat((r.match(/(\d+(?:,\d+)?)\s*$/) || [0, "0"])[1].replace(",", ".")));
+function optDeg(e, v, attr){ const vs = [...new Set([].concat(...e.rep.map(r => (r.match(/(\d+(?:,\d+)?)/g) || []).map(x => parseFloat(x.replace(",", "."))))))].filter(x => x <= e.pts).sort((a, b) => a - b);
+  return `<select ${attr}><option value="">—</option>${vs.map(x => `<option value="${x}" ${+v === x && v !== "" && v != null ? "selected" : ""}>${String(x).replace(".", ",")}</option>`).join("")}</select>`; }
+function optAfl(a, v, attr){ return `<select ${attr}><option value="">—</option>${a.deg.map(d => `<option value="${d[1]}" ${v !== "" && v != null && +v === d[1] ? "selected" : ""}>${esc(d[0])} ${String(d[1]).replace(".", ",")}</option>`).join("")}</select>`; }
+function noteEleve(c, e){
+  const g = c.grp[e.g] || {}, x = c.el[e.nom] || {};
+  const comp = COMP.reduce((a, k, i) => a + (+g["c" + i] || 0), 0);
+  const p = n => INTERP.reduce((a, k, i) => a + (+x[n + i] || 0), 0);
+  const interp = Math.max(p("a"), p("b"));
+  const tot = comp + interp + (+x.afl2 || 0) + (+x.afl3 || 0);
+  return {comp, interp, tot};
+}
+VIEWS.notation = () => {
+  const s = notState(), c = s.classes[s.cur] || (s.classes[s.cur] = {eleves:[], grp:{}, el:{}});
+  const groupes = [...new Set(c.eleves.map(e => e.g).filter(Boolean))].sort((a, b) => a.localeCompare(b, "fr", {numeric:true}));
+  const gtab = groupes.length ? `<h3>Composer · note du groupe (S8)</h3><table class="tab scroll nt"><tr><th>Groupe</th>${COMP.map(e => `<th>${esc(e.el.replace("Composer · ", ""))} /${e.pts}</th>`).join("")}<th>Total /6</th></tr>${groupes.map(g => { const v = c.grp[g] || {}; return `<tr><td>${esc(g)}</td>${COMP.map((e, i) => `<td>${optDeg(e, v["c" + i], `data-ng="${esc(g)}|c${i}"`)}</td>`).join("")}<td class="tot">${String(COMP.reduce((a, e, i) => a + (+v["c" + i] || 0), 0)).replace(".", ",")}</td></tr>`; }).join("")}</table>` : "";
+  const etab = c.eleves.length ? `<h3>Interpréter (meilleur des deux passages), AFL2, AFL3</h3><table class="tab scroll nt"><tr><th>Élève</th><th>Groupe</th>${INTERP.map(e => `<th>S7 · ${esc(e.el.replace("Interpréter · ", ""))}</th>`).join("")}${INTERP.map(e => `<th>S8 · ${esc(e.el.replace("Interpréter · ", ""))}</th>`).join("")}<th>AFL2</th><th>AFL3</th><th>/20</th></tr>
+    ${c.eleves.map((e, k) => { const x = c.el[e.nom] || {}, n = noteEleve(c, e); return `<tr><td>${esc(e.nom)}</td><td><select data-eg="${k}">${["", ...Array.from({length:10}, (_, i) => "G" + (i + 1))].map(g => `<option ${g === e.g ? "selected" : ""}>${g}</option>`).join("")}</select></td>${INTERP.map((q, i) => `<td>${optDeg(q, x["a" + i], `data-ne="${k}|a${i}"`)}</td>`).join("")}${INTERP.map((q, i) => `<td>${optDeg(q, x["b" + i], `data-ne="${k}|b${i}"`)}</td>`).join("")}<td>${optAfl(EVAL.afl2, x.afl2, `data-ne="${k}|afl2"`)}</td><td>${optAfl(EVAL.afl3, x.afl3, `data-ne="${k}|afl3"`)}</td><td class="tot">${String(Math.round(n.tot * 4) / 4).replace(".", ",")}</td></tr>`; }).join("")}</table>` : "";
+  return `<h2>Saisie des notes</h2><p>Les noms et les notes restent sur cet appareil (rien n’est envoyé en ligne). Importer la liste de la classe depuis Pronote (export .csv ou liste collée), répartir les élèves en groupes, puis saisir les degrés. L’export CSV est prêt pour Pronote.</p>
+  <div class="form noprint"><label>Classe <select id="nt-cl">${Object.keys(s.classes).map(k => `<option ${k === s.cur ? "selected" : ""}>${esc(k)}</option>`).join("")}</select></label><button class="btn ghost mini" type="button" id="nt-add">Nouvelle classe</button>
+  <label>Fichier Pronote (.csv, .txt) <input type="file" id="nt-file" accept=".csv,.txt,text/csv,text/plain"></label></div>
+  <details class="noprint"><summary>Coller une liste (un élève par ligne)</summary><textarea id="nt-paste" placeholder="NOM Prénom"></textarea><button class="btn mini" type="button" id="nt-pasteok">Ajouter ces élèves</button></details>
+  ${c.eleves.length ? "" : `<p class="note">Aucun élève pour cette classe.</p>`}
+  ${gtab}${etab}
+  <div class="actions noprint"><button class="btn" type="button" id="nt-csv" ${c.eleves.length ? "" : "disabled"}>Exporter en CSV</button><button class="btn ghost" type="button" id="nt-raz">Effacer cette classe</button></div>`;
+};
+function importNoms(txt){
+  const lignes = txt.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  const sep = lignes.length && /;/.test(lignes[0]) ? ";" : (/\t/.test(lignes[0] || "") ? "\t" : (/,/.test(lignes[0] || "") ? "," : null));
+  let noms = lignes.map(l => { if(!sep) return l; const c = l.split(sep).map(x => x.replace(/^"|"$/g, "").trim()); return c.length > 1 && c[1] && !/\d/.test(c[1]) && c[0].toUpperCase() === c[0] ? c[0] + " " + c[1] : c[0]; });
+  noms = noms.filter(n => n && !/^(nom|élève|eleve)\b/i.test(n));
+  const s = notState(), c = s.classes[s.cur];
+  noms.forEach(n => { if(!c.eleves.some(e => e.nom === n)) c.eleves.push({nom:n, g:""}); });
+  notSave(s); render();
+}
+function exportCSV(){
+  const s = notState(), c = s.classes[s.cur];
+  const L = [["Élève","Groupe","Composer /6","Interpréter /6","AFL2 /4","AFL3 /4","Note /20"].join(";")];
+  c.eleves.forEach(e => { const x = c.el[e.nom] || {}, n = noteEleve(c, e); L.push([e.nom, e.g, n.comp, n.interp, x.afl2 || "", x.afl3 || "", Math.round(n.tot * 4) / 4].map(v => String(v).replace(".", ",")).join(";")); });
+  const b = new Blob(["﻿" + L.join("\n")], {type:"text/csv;charset=utf-8"});
+  const a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = `danse-2de-${s.cur.replace(/\W+/g, "-")}.csv`; document.body.appendChild(a); a.click(); a.remove();
+}
+VIEWS.sources = () => `<h2>Repères et sources</h2>
+  <p>Les procédés, les règles de sécurité et le format de la chorégraphie s’appuient sur les documents ci-dessous. Trois des liens fournis (P. Messin, Dijon, bjerome) n’ont pas pu être lus automatiquement : ils sont listés pour être consultés directement.</p>
+  <table class="tab scroll"><tr><th>Document</th><th>Ce qu’on en a retenu</th></tr>${SOURCES.map(s => `<tr><td>${s[2] ? `<a href="${esc(s[2])}">${esc(s[0])}</a>` : esc(s[0])}</td><td>${esc(s[1])}</td></tr>`).join("")}</table>
+  <h3>Repères de spécialiste</h3><ul><li>Un porter de danse se juge sur sa liaison (entrée et sortie), pas sur sa hauteur. Le contact improvisation (point de contact qui roule, poids partagé) est la meilleure porte d’entrée pour des débutants.</li><li>En Seconde, viser 1 min 30 à 2 min : au-delà, la mémoire et la qualité baissent.</li><li>Le procédé imposé par tirage oblige à composer ; la focale choisie oblige à interpréter. Les deux ensemble évitent la « suite de figures ».</li><li>La musique se choisit tôt (S5 au plus tard) : changer de musique en S6 fait perdre une séance.</li></ul>`;
+
+const TABS = [["accueil","Accueil"],["seances","Séances"],["porters","Porters"],["figdyn","Figures dynamiques"],["procedes","Procédés"],["leviers","Focales"],["tirage","Tirage au sort"],["passages","Passages"],["echauff","Échauffements"],["securite","Sécurité"],["banque","Banque"],["diff","Différenciation"],["eval","Évaluation"],["notation","Notes"],["sources","Sources"]];
+const tabH = (location.hash.match(/^#tab-(\w+)/) || [])[1];
+let curTab = (tabH && TABS.some(t => t[0] === tabH)) ? tabH : LS.get("danse2de_tab", "accueil");
+function render(){
+  $("#nav").innerHTML = TABS.map(t => `<button type="button" class="${t[0] === curTab ? "on" : ""}" data-tab="${t[0]}">${t[1]}</button>`).join("");
+  $("#main").innerHTML = (VIEWS[curTab] || VIEWS.accueil)();
+}
+
+/* ---------- Événements ---------- */
+document.addEventListener("click", e => {
+  const b = e.target.closest("button"); if(!b) return;
+  if(b.dataset.tab){ curTab = b.dataset.tab; LS.set("danse2de_tab", curTab); render(); window.scrollTo(0, 0); return; }
+  if(b.dataset.openS !== undefined){ curSeance = +b.dataset.openS; curTab = "seances"; LS.set("danse2de_tab", curTab); render(); window.scrollTo(0, 0); return; }
+  if(b.dataset.s !== undefined){ curSeance = +b.dataset.s; render(); return; }
+  if(b.dataset.today !== undefined){ LS.set("danse2de_jour", +b.dataset.today); render(); return; }
+  if(b.dataset.print){ doPrint(b.dataset.print); return; }
+  if(b.classList.contains("tlb")){ startTimer(+b.dataset.min, b.dataset.lab); return; }
+  if(b.id === "tm-close"){ stopTimer(); return; }
+  /* tirage */
+  if(b.dataset.tire || b.dataset.joker || b.dataset.tous || b.id === "tir-add" || b.id === "tir-ren" || b.id === "tir-raz"){
+    const s = tirState(), cl = s.classes[s.cur] || (s.classes[s.cur] = {});
+    if(b.dataset.tire){ const [g, k] = b.dataset.tire.split("|"); tirer(cl, g, k); dernier = g; }
+    else if(b.dataset.joker){ const [g, k] = b.dataset.joker.split("|"); if(cl[g] && !cl[g].joker && confirm(`Utiliser le joker de ${g} pour relancer « ${ETAPES.find(x => x[0] === k)[1]} » ? Il ne servira plus.`)){ tirer(cl, g, k); cl[g].joker = true; dernier = g; } }
+    else if(b.dataset.tous){ for(let i = 1; i <= s.nb; i++){ const g = "G" + i; ETAPES.filter(x => x[2] === b.dataset.tous).forEach(x => { if(!(cl[g] && cl[g][x[0]] != null)) tirer(cl, g, x[0]); }); } dernier = null; }
+    else if(b.id === "tir-add"){ const n = prompt("Nom de la classe (ex. 2de 4) :"); if(n && !s.classes[n]){ s.classes[n] = {}; s.cur = n; } }
+    else if(b.id === "tir-ren"){ const n = prompt("Nouveau nom :", s.cur); if(n && n !== s.cur && !s.classes[n]){ s.classes[n] = s.classes[s.cur]; delete s.classes[s.cur]; s.cur = n; } }
+    else if(b.id === "tir-raz"){ if(confirm("Effacer tous les tirages de " + s.cur + " ?")) s.classes[s.cur] = {}; dernier = null; }
+    tirSave(s); render(); return;
+  }
+  /* notes */
+  if(b.id === "nt-add"){ const s = notState(), n = prompt("Nom de la classe :"); if(n && !s.classes[n]){ s.classes[n] = {eleves:[], grp:{}, el:{}}; s.cur = n; notSave(s); render(); } return; }
+  if(b.id === "nt-pasteok"){ importNoms($("#nt-paste").value); return; }
+  if(b.id === "nt-csv"){ exportCSV(); return; }
+  if(b.id === "nt-raz"){ const s = notState(); if(confirm("Effacer les élèves et les notes de " + s.cur + " ?")){ s.classes[s.cur] = {eleves:[], grp:{}, el:{}}; notSave(s); render(); } return; }
+});
+document.addEventListener("change", e => {
+  const t = e.target;
+  if(t.id === "tir-cl"){ const s = tirState(); s.cur = t.value; tirSave(s); dernier = null; render(); }
+  else if(t.id === "tir-nb"){ const s = tirState(); s.nb = +t.value; tirSave(s); render(); }
+  else if(t.dataset.gnom){ const s = tirState(), cl = s.classes[s.cur]; (cl[t.dataset.gnom] = cl[t.dataset.gnom] || {}).nom = t.value.trim(); tirSave(s); }
+  else if(t.id === "nt-cl"){ const s = notState(); s.cur = t.value; notSave(s); render(); }
+  else if(t.id === "nt-file" && t.files[0]){ const r = new FileReader(); r.onload = () => importNoms(String(r.result)); r.readAsText(t.files[0], "utf-8"); }
+  else if(t.dataset.ng){ const s = notState(), c = s.classes[s.cur], [g, k] = t.dataset.ng.split("|"); (c.grp[g] = c.grp[g] || {})[k] = t.value; notSave(s); render(); }
+  else if(t.dataset.ne){ const s = notState(), c = s.classes[s.cur], [i, k] = t.dataset.ne.split("|"), nom = c.eleves[+i].nom; (c.el[nom] = c.el[nom] || {})[k] = t.value; notSave(s); render(); }
+  else if(t.dataset.eg !== undefined){ const s = notState(), c = s.classes[s.cur]; c.eleves[+t.dataset.eg].g = t.value; notSave(s); render(); }
+});
+
+/* ---------- Minuteur ---------- */
+let TM = null;
+function beep(f, d){ try{ const A = new (window.AudioContext || window.webkitAudioContext)(), o = A.createOscillator(); o.frequency.value = f; o.connect(A.destination); o.start(); setTimeout(() => { o.stop(); A.close(); }, d); }catch(e){} }
+function startTimer(min, lab){ stopTimer(); const fin = Date.now() + min * 60000; $("#timer").hidden = false; $("#tm-lab").textContent = lab;
+  const tick = () => { const r = Math.max(0, Math.round((fin - Date.now()) / 1000)); $("#tm-t").textContent = String(Math.floor(r / 60)).padStart(2, "0") + ":" + String(r % 60).padStart(2, "0"); if(r === 30) beep(660, 150); if(r <= 0){ beep(880, 700); clearInterval(TM); TM = null; } };
+  tick(); TM = setInterval(tick, 1000); }
+function stopTimer(){ if(TM) clearInterval(TM); TM = null; $("#timer").hidden = true; }
+
+/* ---------- Impression ---------- */
+function printContent(kind){
+  if(/^S\d$/.test(kind)) return seanceHTML(SEANCES.findIndex(s => s.id === kind), true);
+  if(kind === "cycle"){
+    const som = `<section class="seance"><h2>Cycle danse CA3 · Seconde · 8 séances de 75 min</h2><p>Des porters aux procédés de composition. Groupes affinitaires de 3 à 5, tatamis. Tirage au sort d’un thème et de contraintes à partir de S4.</p><table class="tab"><tr><th>Séance</th><th>Titre</th><th>Passage</th><th>Porters</th></tr>${SEANCES.map(S => `<tr><th>${S.id}</th><td>${esc(S.titre)}</td><td>${PASS_TXT[S.passage].replace("Passage : ", "")}</td><td>${S.porters.join(", ")}</td></tr>`).join("")}</table>
+      <h3>Évaluation</h3><p>${esc(EVAL.regle)}</p></section>`;
+    return som + SEANCES.map((S, i) => seanceHTML(i, true)).join("");
+  }
+  if(kind === "porters") return `<section>${VIEWS.porters()}</section>`;
+  if(kind === "procedes") return `<section>${VIEWS.procedes()}</section>`;
+  if(kind === "figdyn") return `<section>${figdynHTML(true)}</section>`;
+  if(kind === "projet") return `<div class="pg"><h2>Fiche projet du groupe</h2><p class="small">Thème : ………………… · Procédé imposé : ………………… · Focale : ………………… · Espace : ………………… · Porter : ………………… · Temps : …………………</p>${projetCorps()}</div>`;
+  if(kind === "spectateur") return [1, 2].map(() => `<div class="pg"><h2>Fiche du spectateur-lecteur</h2><p class="small">Mon nom : ……………………… · Séance : ……</p>${specHTML()}</div>`).join("");
+  if(kind === "echauffement") return `<div class="pg"><h2>Échauffement autonome de groupe</h2>${echHTML()}</div>`;
+  if(kind === "securite") return `<div class="pg"><h2>Sécurité des porters</h2>${secuHTML()}</div>`;
+  if(kind === "evaluation") return `<div class="pg"><h2>Évaluation danse CA3 · Seconde · /20</h2>${evalHTML()}</div>`;
+  if(kind === "banque") return `<section>${VIEWS.banque()}</section>`;
+  if(kind === "tirages"){ const s = tirState(), cl = s.classes[s.cur] || {}; return Array.from({length: s.nb}, (_, i) => contratHTML("G" + (i + 1), cl["G" + (i + 1)], s.cur)).join(""); }
+  return "";
+}
+function doPrint(kind){
+  $("#printzone").innerHTML = printContent(kind);
+  document.body.classList.add("printing");
+  setTimeout(() => { window.print(); document.body.classList.remove("printing"); $("#printzone").innerHTML = ""; }, 60);
+}
+
+/* ---------- Démarrage ---------- */
+(function(){
+  const q = new URLSearchParams(location.search).get("print");
+  if(q){ document.body.classList.add("printmode"); $("#printzone").innerHTML = printContent(q); return; }
+  render();
+})();
+if("serviceWorker" in navigator && location.protocol === "https:"){ navigator.serviceWorker.register("sw.js").catch(() => {}); }
+</script>
+</body>
+</html>

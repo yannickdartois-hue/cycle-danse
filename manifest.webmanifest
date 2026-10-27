@@ -1,0 +1,14 @@
+{
+ "name": "Cycle Danse · CA3 · Seconde · Lycée Georges Pompidou",
+ "short_name": "Danse",
+ "start_url": "./",
+ "scope": "./",
+ "display": "standalone",
+ "background_color": "#f3f5f8",
+ "theme_color": "#a21caf",
+ "lang": "fr",
+ "icons": [
+  {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+  {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"}
+ ]
+}
