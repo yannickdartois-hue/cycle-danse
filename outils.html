@@ -281,13 +281,24 @@ function figdynCarte(f, print){
   ${print ? "" : `<details class="noprint"><summary>Voir la fiche d’origine (kinogramme et photos des prises)</summary><img class="fdimg" src="img/fd-${f.id}.jpg" alt="Fiche ${f.id} ${esc(f.nom)}" loading="lazy"></details>`}
   <div class="fd2"><div><h4>Critères de réalisation</h4>${L("Porteur", f.p)}${L("Voltigeur", f.v)}</div><div><h4>Conduites typiques (ce que le juge repère)</h4>${L("Porteur", f.cp)}${L("Voltigeur", f.cv)}</div></div></article>`;
 }
+const ETOILES = n => "★".repeat(n) + "☆".repeat(5 - n);
+const SECONDE = {oui:["Adaptée à la Seconde","st-faite"], aide:["Avec parade et validation","st-jour"], non:["Pas en Seconde (rotation ou risque élevé)","st-eval"]};
+function messinCarte(m, print){
+  return `<article class="card fd"><h3 style="margin-top:0">${esc(m.nom)} <span class="pill">${esc(String(m.nb))} élèves</span><span class="pill ${SECONDE[m.seconde][1]}">${SECONDE[m.seconde][0]}</span></h3>
+  <p class="small"><b>Difficulté</b> ${ETOILES(m.d)} · <b>Risque</b> ${ETOILES(m.r)} · <b>Spectaculaire</b> ${ETOILES(m.s)} · <b>Énergie</b> porteur / voltigeur ${esc(m.e)} · <b>Valeur</b> ${esc(m.v)}/1${m.lien ? ` · proche de ${esc(m.lien)}` : ""}</p>
+  <ol>${m.etapes.map(x => `<li>${esc(x)}</li>`).join("")}</ol>
+  ${print ? `<p class="small">Planche ${esc(m.id)} de P. Messin (dossier Drive du professeur).</p>` : `<p class="small"><a href="${esc(m.drive)}" target="_blank" rel="noopener">Voir la planche ${esc(m.id)} avec ses images (ton Drive)</a></p>`}</article>`;
+}
 function figdynHTML(print){
   return `<h2>Figures dynamiques : code A à D</h2>
   <p>Code de figures dynamiques et fiches détaillées de la formation acrosport d’E. Courtelarre. Le code classe les figures en 4 niveaux (A à D) ; les fiches donnent les prises, les critères de réalisation et les conduites typiques du porteur et du voltigeur. Les conduites typiques servent de grille d’observation aux juges.</p>
   <p class="warnbox"><b>En Seconde.</b> Les renversements et redressements de l’ATR se font avec aide et parade au début. Les rotations arrière (C3 salto arrière, D3 flip arrière, D4 salto arrière prise carrée) dépassent la règle du cycle : réservées aux élèves gymnastes, avec la parade du professeur, et seulement après validation. Elles n’entrent pas dans les chorégraphies sans cet accord.</p>
   ${print ? "" : `<div class="actions noprint"><button class="btn ghost" type="button" data-print="figdyn">Imprimer les fiches</button><a class="btn ghost" href="${PDF("figdyn")}">PDF</a></div>`}
   <h3>Le code (niveaux A à D)</h3><div class="pcards">${["code-ab","code-cd"].map(n => `<figure class="dz dz-img"><img src="img/fd-${n}.jpg" alt="Code des figures dynamiques, ${n === "code-ab" ? "niveaux A et B" : "niveaux C et D"}" loading="lazy"><figcaption class="cap">${n === "code-ab" ? "Niveaux A et B" : "Niveaux C et D"}</figcaption></figure>`).join("")}</div>
-  ${["B","C","D"].map(n => `<h3>Niveau ${n}</h3>${FIGDYN.filter(f => f.id[0] === n).map(f => figdynCarte(f, print)).join("")}`).join("")}`;
+  ${["B","C","D"].map(n => `<h3>Niveau ${n}</h3>${FIGDYN.filter(f => f.id[0] === n).map(f => figdynCarte(f, print)).join("")}`).join("")}
+  <h2 style="margin-top:28px">Planches de P. Messin</h2>
+  <p>Dix figures dynamiques décrites étape par étape, avec la note subjective de Messin sur 5. La colonne « En Seconde » dit si la figure peut entrer dans le cycle.</p>
+  ${MESSIN.map(m => messinCarte(m, print)).join("")}`;
 }
 VIEWS.figdyn = () => figdynHTML(false);
 VIEWS.procedes = () => {
@@ -382,7 +393,8 @@ function secuHTML(){
   return `<h3>Tenue</h3><ul>${SECU.tenue.map(x => `<li>${esc(x)}</li>`).join("")}</ul>
   <h3>Les règles des porters</h3><ol>${SECU.regles.map(x => `<li>${esc(x)}</li>`).join("")}</ol>
   <h3>Les prises</h3><table class="tab">${SECU.prises.map(p => `<tr><th>${esc(p[0])}</th><td>${esc(p[1])}</td></tr>`).join("")}</table>
-  <h3>Les rôles</h3><table class="tab">${SECU.roles.map(p => `<tr><th>${esc(p[0])}</th><td>${esc(p[1])}</td></tr>`).join("")}</table>`;
+  <h3>Les rôles</h3><table class="tab">${SECU.roles.map(p => `<tr><th>${esc(p[0])}</th><td>${esc(p[1])}</td></tr>`).join("")}</table>
+  <h3>Les 20 commandements de la construction (P. Messin)</h3><p class="small muted">Écrits pour les pyramides d’acrosport ; ils valent aussi pour les porters en mouvement.</p><ol>${COMMANDEMENTS.map(c => `<li>${esc(c)}</li>`).join("")}</ol>`;
 }
 VIEWS.securite = () => `<h2>Sécurité</h2><p>À afficher et à lire en S1, à rappeler à chaque installation. Les règles sont celles de l’acrosport (piliers, porter en 4 temps, parade), appliquées à des porters en mouvement.</p>
   <div class="actions noprint"><button class="btn ghost" type="button" data-print="securite">Imprimer</button><a class="btn ghost" href="${PDF("securite")}">PDF</a></div>${secuHTML()}`;
