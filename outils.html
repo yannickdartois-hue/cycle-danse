@@ -307,8 +307,10 @@ VIEWS.procedes = () => {
   Object.keys(FAMILLES_PROC).forEach(fk => {
     const L = PROCEDES.filter(p => p.fam === fk); if(!L.length) return;
     h += `<h3 style="color:${FAMILLES_PROC[fk].c}">${esc(FAMILLES_PROC[fk].nom)}</h3>`;
-    L.forEach(p => { const sv = PROC_DESSIN[p.id] ? svgProc(p.id) : ""; h += `<article class="proc" style="--c:${FAMILLES_PROC[fk].c}"><h4>${esc(p.nom)}</h4><p>${esc(p.def)}</p><p><b>Avec un porter.</b> ${esc(p.porter)}</p><p class="small muted"><b>Piège.</b> ${esc(p.piege)}</p>${sv ? `<div class="dz">${sv}</div>` : ""}${p.id === "niveaux" ? svgScene("espace") : ""}</article>`; });
+    L.forEach(p => { const sv = PROC_DESSIN[p.id] ? svgProc(p.id) : ""; h += `<article class="proc" style="--c:${FAMILLES_PROC[fk].c}"><h4>${esc(p.nom)}</h4><p>${esc(p.def)}</p><p><b>Avec un porter.</b> ${esc(p.porter)}</p>${p.effet ? `<p><b>Effet sur le public.</b> ${esc(p.effet)}</p>` : ""}${p.variante ? `<p class="small">${esc(p.variante)}</p>` : ""}<p class="small muted"><b>Piège.</b> ${esc(p.piege)}</p>${sv ? `<div class="dz">${sv}</div>` : ""}${p.id === "niveaux" ? svgScene("espace") : ""}</article>`; });
   });
+  h += `<h3>La musique</h3><p>Du bruit de fond à la musique qui porte le sens : où en est le groupe ?</p><table class="tab scroll">${MUSIQUE.niveaux.map(n => `<tr><th>${n[0]} · ${esc(n[1])}</th><td>${esc(n[2])}</td></tr>`).join("")}</table><ul>${MUSIQUE.outils.map(x => `<li>${esc(x)}</li>`).join("")}</ul>`;
+  h += `<h3>Trois inducteurs pour lancer la création</h3>${INDUCTEURS.map(x => `<article class="proc"><h4>${esc(x.t)}</h4><p>${esc(x.txt)}</p></article>`).join("")}`;
   h += `<h3>Les verbes d’action</h3><p>La grille du lycée demande au moins 4 verbes différents. Exemples : ${VERBES.map(esc).join(" · ")}.</p>`;
   h += `<h3>Les composantes du mouvement</h3><table class="tab scroll"><tr><th>Espace</th><td>Niveaux (sol, moyen, haut), directions, trajets, orientation par rapport au public, proche / loin.</td></tr><tr><th>Temps</th><td>Vitesse, accélération, ralenti, arrêt, rythme, rapport à la musique (sur le temps, à contretemps).</td></tr><tr><th>Énergie</th><td>Lourd / léger, continu / saccadé, tonique / relâché.</td></tr><tr><th>Relation</th><td>Avec les partenaires (contact, regard, porter, unisson, décalage) et avec le public.</td></tr></table>`;
   return h;

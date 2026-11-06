@@ -168,7 +168,27 @@ const PROCEDES = [
  {id:"inversion", nom:"Inversion", fam:"ges", def:"Refaire une phrase à l’envers, de la fin vers le début, comme une vidéo rembobinée.", porter:"La sortie du porter devient l’entrée : on « déchute » vers le haut.", piege:"Choisir une phrase courte (8 temps) : à l’envers, tout est plus difficile.", frise:"inversion"},
  {id:"transposition", nom:"Transposition", fam:"ges", def:"Faire le même mouvement à un autre niveau ou avec une autre partie du corps : un tour debout devient un tour au sol.", porter:"Le porter debout est transposé au sol (même dessin, couché).", piege:"On doit reconnaître le mouvement d’origine.", frise:"repetition"},
  {id:"contraste", nom:"Contraste", fam:"esp", def:"Opposer deux qualités en même temps ou à la suite : haut/bas, vite/lent, serré/dispersé.", porter:"Un porter très lent à côté d’un duo qui court ; ou un porter haut à côté d’un danseur au sol.", piege:"Un seul contraste à la fois, sinon on ne voit rien.", frise:"contrepoint"},
- {id:"niveaux", nom:"Niveaux et trajets", fam:"esp", def:"Utiliser le sol, le niveau moyen et le haut ; dessiner des trajets lisibles (diagonale, cercle, ligne).", porter:"Le porter amène un danseur en haut pendant que les autres sont au sol : le regard du public monte.", piege:"La diagonale fond de scène → avant-scène est le trajet le plus fort.", frise:""}
+ {id:"niveaux", nom:"Niveaux et trajets", fam:"esp", def:"Utiliser le sol, le niveau moyen et le haut ; dessiner des trajets lisibles (diagonale, cercle, ligne).", porter:"Le porter amène un danseur en haut pendant que les autres sont au sol : le regard du public monte.", piege:"La diagonale fond de scène → avant-scène est le trajet le plus fort.", frise:""},
+ {id:"polyphonie", nom:"Polyphonie", fam:"col", def:"Chaque danseur fait sa propre phrase, en même temps que les autres : plusieurs voix superposées.", porter:"Chaque duo monte un porter différent au même moment : le public ne sait plus où regarder, puis tout se resserre en unisson.", piege:"Courte (8 à 16 temps) et suivie d’un unisson, sinon on ne lit plus rien."},
+ {id:"soustraction", nom:"Soustraction", fam:"ges", def:"L’inverse de l’accumulation gestuelle : on répète la phrase en retirant le dernier geste à chaque fois (ABCDE, ABCD, ABC, AB, A).", porter:"Le porter disparaît de la phrase en premier : le groupe « oublie » peu à peu ce qu’il savait faire.", piege:"Le dernier geste qui reste (A) doit être fort : c’est l’image finale."}
+];
+
+/* Effet produit sur le public (d'après la fiche « Procédés de composition et effets sur le spectateur » de l'équipe EPS) */
+const EFFETS = {unisson:"Cohésion, force, harmonie ; ennui s’il dure trop.", miroir:"Dialogue, symétrie, couple ; étrangeté si le reflet se dérègle.", cascade:"Surprise, jeu, gaieté : la vague attire l’œil.", canon:"Ordre, insistance, développement ; ennui si trop long.", question:"Dialogue ou dispute, selon l’énergie de la réponse.", accumulation:"Progression, montée en puissance, effet de groupe.", lacher:"Différence, exclusion puis acceptation ; surprise au retour.", contrepoint:"Différence, solitude, exclusion : on suit l’isolé.", contagion:"Inquiétude ou entraînement collectif : quelque chose se propage.", permutation:"Désordre, dispute (le « concassage ») : même matière, ordre différent.", repetition:"Insistance, obsession ; humour si la 3e fois rate.", crescendo:"Crescendo : urgence, montée en puissance. Décrescendo : sérénité ou dégénérescence.", arret:"Suspension : le public retient son souffle.", inversion:"Retour en arrière, remonter le temps, regret.", transposition:"Énigme : différent et pourtant pareil.", contraste:"Tension entre deux mondes ; le regard va et vient.", niveaux:"Le regard monte et descend : grandeur, chute, élévation.", polyphonie:"Variété, singularité, désordre ; foule ou chaos.", soustraction:"Oubli, effacement, repli sur soi, dégénérescence."};
+PROCEDES.forEach(p => { p.effet = EFFETS[p.id] || ""; });
+const ACCU_GESTE = "Autre accumulation, sur la phrase : on ajoute un geste à chaque reprise en repartant du début (A, AB, ABC, ABCD).";
+PROCEDES.find(p => p.id === "accumulation").variante = ACCU_GESTE;
+
+/* Musique : du bruit de fond à la musique porteuse de sens (grille de l'équipe EPS) */
+const MUSIQUE = {
+ niveaux:[["N1","Bruit de fond","Musique de fond, sans rapport avec la chorégraphie ; les danseurs ne l’écoutent pas."],["N2","Atmosphère","Ambiance adaptée à l’énergie de la composition ; support rythmique qui aide à danser ensemble."],["N3","Accompagnement","Support de la structure : les temps forts sont valorisés, les phrases musicales coïncident avec les phrases dansées."],["N4","Évocation","La musique porte le sens : elle guide l’action, renforce les émotions et parle au public avec les danseurs."]],
+ outils:["Une phrase musicale dure en général 8 temps : compter les phrases pour connaître la structure du morceau.","Repérer les temps forts et les temps faibles pour placer les porters, les arrêts et les départs.","Utiliser un silence ou une rupture de la musique : c’est un moment fort pour un arrêt sur image."]
+};
+/* Inducteurs pour démarrer une création (cycle d'acrodanse de Carine) */
+const INDUCTEURS = [
+ {t:"Le mot ou le verbe du groupe", txt:"Chaque danseur apporte un mot ou un verbe lié au thème et le traduit en un mouvement de 8 temps. Le groupe ne peut pas refuser : on enchaîne les 7 ou 8 mouvements dans un ordre choisi ensemble, puis on fait varier niveaux, regroupements et énergie."},
+ {t:"La murmuration (bras seuls)", txt:"Inspiré du tutting de Sadeck Berrabah : les danseurs restent immobiles, seuls les bras bougent, en gestes très angulaires. Plus il y a de danseurs, plus les images sont fortes : idéal en cascade et en canon."},
+ {t:"Les percussions corporelles", txt:"Frapper mains, cuisses, poitrine, pieds (sur soi ou sur un partenaire) en suivant la musique. Le rythme se voit et s’entend : on dérive ensuite vers un mouvement évocateur du thème."}
 ];
 
 /* ---------- Verbes d'action (grille du lycée : au moins 4 verbes différents) ---------- */
@@ -804,7 +824,9 @@ const PROC_DESSIN = {
   crescendo:{T:16, l:[[[0,6,"a"],[6,10,"a"],[10,12.5,"a"],[12.5,14,"a"]]], txt:"la même phrase, de plus en plus vite"},
   arret:{T:16, l:[[[0,7,"a"],[7,11,"i"],[11,16,"a"]],[[0,7,"a"],[7,11,"i"],[11,16,"a"]],[[0,7,"a"],[7,11,"i"],[11,16,"a"]]], txt:"tous figés dans la figure, puis on repart"},
   permutation:{T:16, l:[[[0,4,"a"],[4,8,"b"],[8,12,"c"],[12,16,"p"]],[[0,4,"p"],[4,8,"b"],[8,12,"c"],[12,16,"a"]],[[0,4,"b"],[4,8,"p"],[8,12,"a"],[12,16,"c"]]], txt:"les mêmes éléments A B C D, dans un autre ordre"},
-  inversion:{T:16, l:[[[0,8,"a",">"],[8,16,"b","<"]]], txt:"la phrase, puis la même à l’envers"}
+  inversion:{T:16, l:[[[0,8,"a",">"],[8,16,"b","<"]]], txt:"la phrase, puis la même à l’envers"},
+  polyphonie:{T:16, l:[[[0,8,"a"],[8,16,"a"]],[[0,8,"b"],[8,16,"a"]],[[0,8,"c"],[8,16,"a"]],[[0,8,"b"],[8,16,"a"]]], txt:"chacun sa phrase, puis tous à l’unisson"},
+  soustraction:{T:16, l:[[[0,5,"a"],[5,9,"a"],[9,12,"a"],[12,14,"a"]]], txt:"la phrase de plus en plus courte"}
 };
 const PROC_COUL = {a:"#a21caf", b:"#0e7490", c:"#701a75", p:"#b45309", i:"#94a3b8"};
 function svgProc(id){
@@ -828,7 +850,8 @@ function svgProc(id){
 }
 function procedesHTML(ids){
   const L = ids.map(svgProc).filter(Boolean);
-  return L.length ? `<div class="dz">${L.join("")}<p class="cap">Une ligne par danseur (D1, D2…), le temps en temps musicaux de gauche à droite.</p></div>` : "";
+  const E = ids.map(procById).filter(p => p && p.effet).map(p => `<b>${escD(p.nom)}</b> : ${escD(p.effet)}`);
+  return L.length ? `<div class="dz">${L.join("")}<p class="cap">Une ligne par danseur (D1, D2…), le temps en temps musicaux de gauche à droite.</p>${E.length ? `<p class="cap">Effet sur le public · ${E.join(" · ")}</p>` : ""}</div>` : "";
 }
 
 /* Cartes de porters */
