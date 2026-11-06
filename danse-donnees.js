@@ -892,8 +892,71 @@ function schema(spec){
   if(t === "porters") return portersHTML(a.split(","));
   if(t === "frise") return friseHTML(a);
   if(t === "leviers") return leviersHTML();
+  if(spec.includes("+")) return spec.split("+").map(schema).join("");
   if(t === "img") return imgHTML(a);
+  if(t === "duo") return duoHTML(a ? a.split(",") : []);
+  if(t === "induc") return inducHTML(a ? a.split(",") : []);
   return "";
+}
+
+
+/* ================== ÉCHAUFFEMENT MUSCULAIRE EN DUO (planche de Yannick, img/duo/) ================== */
+const DUO_CAT = {act:"Activation et cardio", jam:"Jambes", haut:"Haut du corps et gainage", abd:"Abdominaux"};
+const DUO = [
+ {id:"d01", cat:"act", nom:"Jumping jacks et fentes en miroir", txt:"Face à face : l’un fait des jumping jacks, l’autre des fentes avant alternées ; on change au signal."},
+ {id:"d02", cat:"act", nom:"Montées de genoux et tapping en miroir", txt:"Face à face, l’un monte les genoux, l’autre fait un tapping rapide sur place ; 20 s chacun."},
+ {id:"d03", cat:"act", nom:"Saut par-dessus le partenaire en planche", txt:"A en planche basse, bien gainé ; B saute par-dessus pieds joints, aller-retour. On change après 6 sauts."},
+ {id:"d12", cat:"act", nom:"Sauts par-dessus la jambe tendue", txt:"A assis, une jambe tendue au sol ; B saute par-dessus, de côté, en restant léger. A peut lever la jambe pour corser."},
+ {id:"d18", cat:"act", nom:"Passer par-dessus à quatre pattes", txt:"A en planche sur les coudes ; B passe par-dessus à quatre pattes, mains et pieds de chaque côté, sans s’appuyer sur lui."},
+ {id:"d14", cat:"act", nom:"Passer sous le pont", txt:"A en planche bras tendus, bassin haut ; B rampe dessous puis repasse par-dessus. A reste gainé tout du long."},
+ {id:"d04", cat:"jam", nom:"Squat face à face en contrepoids", txt:"Mains tenues, on descend ensemble cuisses à l’horizontale en se penchant en arrière, et on remonte ensemble. C’est le contrepoids P1."},
+ {id:"d06", cat:"jam", nom:"Chaise dos à dos", txt:"Dos contre dos, bras entrelacés : on descend ensemble jusqu’à la chaise et on tient 20 s, puis on remonte sans se lâcher."},
+ {id:"d08", cat:"jam", nom:"Fentes face à face, mains tenues", txt:"Fentes alternées en même temps, genou avant au-dessus du pied ; le partenaire aide à garder l’équilibre."},
+ {id:"d19", cat:"jam", nom:"Squats en miroir, mains au sol", txt:"Côte à côte ou face à face, squat jusqu’à toucher le sol, puis extension complète ; même rythme que le partenaire."},
+ {id:"d23", cat:"jam", nom:"Squat sur une jambe, main tenue", txt:"B tient la main de A qui descend sur une jambe, l’autre tendue devant ; 5 de chaque côté. B aide juste à l’équilibre."},
+ {id:"d30", cat:"jam", nom:"Squat avec le partenaire sur le dos", txt:"Niveau 3, gabarits proches seulement : A porte B sur le dos et fait 5 squats lents, dos droit. Un pareur à côté."},
+ {id:"d33", cat:"jam", nom:"Fente avec le pied arrière sur le partenaire", txt:"B assis, genoux pliés ; A pose le pied arrière sur ses cuisses et descend en fente. 6 de chaque côté."},
+ {id:"d11", cat:"haut", nom:"Planche face à face, taper dans la main", txt:"Les deux en planche, tête contre tête à 50 cm : on se tape dans la main droite, puis la gauche, sans bouger le bassin."},
+ {id:"d20", cat:"haut", nom:"Planche, mains sur les pieds du partenaire", txt:"A en planche, mains posées sur les pieds de B qui fait des squats lents ; A tient gainé pendant toute la série."},
+ {id:"d21", cat:"haut", nom:"Pompes mains sur les genoux du partenaire", txt:"B allongé, genoux pliés serrés ; A fait ses pompes mains sur ses genoux. B garde les genoux immobiles."},
+ {id:"d24", cat:"haut", nom:"Pompes superposées", txt:"A en planche au-dessus de B, qui fait ses pompes dessous ; puis on échange. A garde le bassin haut."},
+ {id:"d13", cat:"haut", nom:"ATR tenu par le partenaire", txt:"B tient A par les chevilles, en se plaçant de côté ; A pousse dans les épaules, bras tendus, 3 à 5 s. A descend une jambe après l’autre."},
+ {id:"d32", cat:"haut", nom:"Relevé de buste et planche, taper dans la main", txt:"A fait un relevé de buste, B en planche face à lui : on se tape dans la main à chaque montée. On change au bout de 10."},
+ {id:"d10", cat:"abd", nom:"Relevés de buste, pieds bloqués", txt:"B bloque les pieds de A avec les siens ; A monte le buste en soufflant, sans tirer sur la nuque. 10, puis on change."},
+ {id:"d15", cat:"abd", nom:"Relevé de buste vers les mains du partenaire", txt:"B debout ou accroupi tend les mains ; A monte toucher ses mains, et B les recule un peu à chaque fois."},
+ {id:"d16", cat:"abd", nom:"Relevés de buste face à face", txt:"Assis face à face, pieds emmêlés : on monte ensemble et on se tape dans les mains en haut."},
+ {id:"d17", cat:"abd", nom:"Relevés de jambes, jambes renvoyées", txt:"A allongé tient les chevilles de B debout ; A monte les jambes, B les repousse vers le sol, A freine la descente sans toucher le sol. Bas du dos collé au sol."},
+ {id:"d25", cat:"abd", nom:"V face à face, pieds contre pieds", txt:"Assis en V, pieds contre ceux du partenaire, jambes en l’air : tenir 15 s, puis petits pédalages ensemble."},
+ {id:"d26", cat:"abd", nom:"Passes en V avec un ballon", txt:"Assis en V côte à côte, le ballon passe de l’un à l’autre en tournant le buste ; on ne pose pas les pieds."},
+ {id:"d35", cat:"abd", nom:"Relevés de jambes tête-bêche", txt:"Allongés tête contre tête, mains tenues : on monte les jambes ensemble jusqu’à la verticale, et on redescend lentement."},
+ {id:"d09", cat:"abd", nom:"Passe de ballon dos à dos", txt:"Dos à dos, jambes écartées : on passe le ballon entre les jambes puis au-dessus de la tête, et on change de sens."}
+];
+const duoById = id => DUO.find(d => d.id === id);
+function duoHTML(ids){
+  const L = (ids && ids.length ? ids.map(duoById) : DUO).filter(Boolean);
+  return `<div class="dz"><div class="duo-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px">${L.map(d => `<figure style="margin:0;background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:8px"><img src="img/duo/${d.id}.jpg" alt="${escD(d.nom)}" loading="lazy" style="width:100%;height:150px;object-fit:contain"><figcaption style="font-size:14px;line-height:1.35"><b>${escD(d.nom)}</b><br>${escD(d.txt)}</figcaption></figure>`).join("")}</div><p class="cap">30 s de travail, 15 s pour changer ; on inverse les rôles à chaque série. Pas de partenaire porté sans gainage.</p></div>`;
+}
+
+/* ================== CARTES INDUCTEURS (émotions) ================== */
+const INDUC = [
+ {n:1, debut:"Entrée de chaque côté de la scène… se croiser, puis arrêt.", contrainte:"Lent au départ → accélérer au croisement → arrêt net.", plus:["Évolution","Indifférence → attirance"], mots:"passion, affection, admiration, tendresse, sympathie, engouement"},
+ {n:2, debut:"Au sol… se relever, puis chute au sol.", contrainte:"Montée lente → chute rapide.", plus:["Évolution","Joie → perte de contrôle"], mots:"joie, gaieté, allégresse, plaisir, extase, jubilation, entrain, satisfaction"},
+ {n:3, debut:"Proche du public… se lever, courir en cercle sur scène, arrêt au centre.", contrainte:"Vitesse rapide constante → arrêt figé.", plus:["Relation","Tous suivent le même trajet (effet de groupe)"], mots:"colère, agressivité, haine, rage, irritation, amertume, tourment, exaspération"},
+ {n:4, debut:"Assis en avant-scène… se lever lentement, un par un.", contrainte:"Très lent du début à la fin.", plus:["Relation","Décalage : chacun attend le précédent"], mots:"tristesse, accablement, déception, cafard, chagrin, mélancolie, désespoir, désarroi"},
+ {n:5, debut:"Hors scène… arriver en courant, arrêt.", contrainte:"Entrée très rapide → petits mouvements rapides sur place après l’arrêt.", plus:["Évolution","Fuite → peur qui reste dans le corps"], mots:"crainte, anxiété, appréhension, effroi, terreur, panique, inquiétude, peur, détresse, horreur"},
+ {n:6, debut:"Au centre de la scène.", contrainte:"Alterner lent / rapide / lent.", plus:["Évolution","Assurance → doute"], mots:"honte, remords, embarras, culpabilité, confusion"},
+ {n:7, debut:"Au sol… se déplacer au sol.", contrainte:"Vitesse très lente, constante.", plus:["Limitation","Répéter 2 fois le même mouvement"], mots:"nonchalance, paresse, mollesse, apathie, somnolence, inertie"},
+ {n:8, debut:"Deux debout en fond de scène, dos au public… un en avant-scène.", contrainte:"Deux rapides / un lent : contraste permanent.", plus:["Relation","Les deux observent le troisième et réagissent"], mots:"curiosité, intrigue, suspicion, manigance, machination, conspiration"},
+ {n:9, debut:"Marche libre sur scène.", contrainte:"Changer de vitesse toutes les 5 secondes (lent, moyen, rapide).", plus:null, mots:"surprise, étonnement, stupeur, sidération, ébahissement"},
+ {n:10, debut:"Immobiles… un démarre, puis les autres suivent.", contrainte:"Départ lent → accélération collective.", plus:["Relation","Effet domino (décalage entre les élèves)"], mots:"enthousiasme, engouement, excitation, ferveur"},
+ {n:11, debut:"En ligne face au public… traverser la scène.", contrainte:"Vitesse rapide, sans arrêt.", plus:["Limitation","Un seul type de déplacement"], mots:"urgence, stress, pression, affolement, précipitation"},
+ {n:12, debut:"En duo, face à face, immobiles.", contrainte:"Très lent → accélération brutale.", plus:["Relation","Opposition : se rapprocher, s’éloigner"], mots:"tension, conflit, provocation, défi"},
+ {n:13, debut:"Un au centre… les autres autour, immobiles.", contrainte:"Solo rapide / groupe lent, puis inversion.", plus:["Relation","Un meneur, puis changement de meneur"], mots:"domination, pouvoir, contrôle, supériorité"},
+ {n:14, debut:"Hors scène… entrée progressive de tous.", contrainte:"Lent → rapide → arrêt collectif.", plus:["Évolution","Attente → espoir"], mots:"espoir, attente, désir, élan, aspiration"}
+];
+function inducHTML(nums){
+  const L = (nums && nums.length ? nums.map(n => INDUC.find(x => x.n === +n)) : INDUC).filter(Boolean);
+  return `<div class="dz"><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px">${L.map(c => `<article style="border:2px solid #a21caf;border-radius:12px;padding:10px 12px;background:#fdf4ff"><b style="color:#a21caf">Carte ${c.n}</b><p style="margin:4px 0"><b>Début.</b> ${escD(c.debut)}</p><p style="margin:4px 0"><b>Contrainte.</b> ${escD(c.contrainte)}</p>${c.plus ? `<p style="margin:4px 0"><b>${escD(c.plus[0])}.</b> ${escD(c.plus[1])}</p>` : ""}<p style="margin:4px 0;font-size:14px"><b>Mots inducteurs.</b> ${escD(c.mots)}</p></article>`).join("")}</div></div>`;
 }
 
 /* ================== FIGURES DYNAMIQUES DE NORMANDIE, EN VERSION DANSÉE ================== */
@@ -1161,3 +1224,14 @@ const MESSIN = [
 ];
 const COMMANDEMENTS = ["Dos plat, tu te positionneras.","La solidité, par de bonnes prises, tu rechercheras.","À Aldo Maccione, Lucky Luke tu préféreras.","Les segments tendus (bras, tronc, jambes), tu aligneras ; en charge, verticalement tu les placeras.","Au relâchement, la tonicité tu choisiras.","Tes jambes, surtout, pour soulever tu utiliseras.","Au milieu du dos du partenaire, tu n’appuieras point.","Sur la base la plus solide, ton ascension tu débuteras.","Les leviers tu raccourciras.","Dans la plupart des cas, en sens inverse de ta montée, tu désescaladeras.","Des appuis suffisants en nombre, surface et orientation, tu étudieras.","Le plus près de l’axe, tu graviras.","Comme un chat, sur la pyramide, tu t’élèveras et tu redescendras.","Rapidement, mais sans précipitation, tu bâtiras : 10 à 20 secondes les piliers supporteront.","Des procédures adéquates, avant de construire, tu définiras.","À l’équilibre de l’ensemble, constamment tu veilleras.","De la moindre difficulté, les partenaires tu alerteras.","Le risque de chute, par ton positionnement, tu anticiperas.","Par ton aide intégrée au mouvement, aucune pyramide ne s’écroulera.","Par l’aménagement de l’espace, aucun démontage ne créera de dégât."];
 SOURCES.splice(1, 0, ["Planches d’animations et « 20 commandements » de P. Messin (dossier Drive du professeur)","10 figures dynamiques décrites étape par étape avec la note subjective de Messin (difficulté, risque, énergie, spectaculaire), et les règles de construction des pyramides.","https://drive.google.com/drive/folders/1NxAZCkX1KxSXCjXNiEA2CdGfmPwAvaxN"]);
+
+/* Illustrations ajoutées (échauffement musculaire en duo, cartes inducteurs) */
+(function(){
+  const F = (id, cat) => SEANCES.find(x => x.id === id).fiches.find(f => f.cat === cat);
+  const add = (f, sch) => { f.schema = f.schema ? f.schema + "+" + sch : sch; };
+  add(F("S1","Échauffement"), "duo:d01,d02,d03,d12,d18,d14");
+  add(F("S2","Échauffement"), "duo:d04,d06,d08,d11,d21,d10");
+  add(F("S5","Échauffement"), "duo:d19,d23,d33,d16,d25,d35");
+  const e4 = F("S4","Échauffement"); add(e4, "induc:1,2,3,5");
+  e4.plus = (e4.plus ? e4.plus + " " : "") + "Ou : chaque groupe tire une carte inducteur (début, contrainte, mots) et l’improvise 30 s.";
+})();

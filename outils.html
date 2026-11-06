@@ -310,6 +310,7 @@ VIEWS.procedes = () => {
     L.forEach(p => { const sv = PROC_DESSIN[p.id] ? svgProc(p.id) : ""; h += `<article class="proc" style="--c:${FAMILLES_PROC[fk].c}"><h4>${esc(p.nom)}</h4><p>${esc(p.def)}</p><p><b>Avec un porter.</b> ${esc(p.porter)}</p>${p.effet ? `<p><b>Effet sur le public.</b> ${esc(p.effet)}</p>` : ""}${p.variante ? `<p class="small">${esc(p.variante)}</p>` : ""}<p class="small muted"><b>Piège.</b> ${esc(p.piege)}</p>${sv ? `<div class="dz">${sv}</div>` : ""}${p.id === "niveaux" ? svgScene("espace") : ""}</article>`; });
   });
   h += `<h3>La musique</h3><p>Du bruit de fond à la musique qui porte le sens : où en est le groupe ?</p><table class="tab scroll">${MUSIQUE.niveaux.map(n => `<tr><th>${n[0]} · ${esc(n[1])}</th><td>${esc(n[2])}</td></tr>`).join("")}</table><ul>${MUSIQUE.outils.map(x => `<li>${esc(x)}</li>`).join("")}</ul>`;
+  h += `<h3>14 cartes inducteurs</h3><p>Chaque carte donne un début, une contrainte de vitesse ou de relation et des mots. Le groupe en tire une, improvise 30 s, puis garde ce qui marche.</p>${inducHTML()}`;
   h += `<h3>Trois inducteurs pour lancer la création</h3>${INDUCTEURS.map(x => `<article class="proc"><h4>${esc(x.t)}</h4><p>${esc(x.txt)}</p></article>`).join("")}`;
   h += `<h3>Les verbes d’action</h3><p>La grille du lycée demande au moins 4 verbes différents. Exemples : ${VERBES.map(esc).join(" · ")}.</p>`;
   h += `<h3>Les composantes du mouvement</h3><table class="tab scroll"><tr><th>Espace</th><td>Niveaux (sol, moyen, haut), directions, trajets, orientation par rapport au public, proche / loin.</td></tr><tr><th>Temps</th><td>Vitesse, accélération, ralenti, arrêt, rythme, rapport à la musique (sur le temps, à contretemps).</td></tr><tr><th>Énergie</th><td>Lourd / léger, continu / saccadé, tonique / relâché.</td></tr><tr><th>Relation</th><td>Avec les partenaires (contact, regard, porter, unisson, décalage) et avec le public.</td></tr></table>`;
@@ -390,6 +391,8 @@ VIEWS.echauff = () => `<h2>Échauffements</h2>
   <tr><td>Articulaire</td><td>Culbuto · enroulement arrière · poignets à deux (A à genoux, B pousse et s’appuie) · cervicales (A pousse, B résiste).</td></tr>
   <tr><td>Échauffement des porters</td><td>Au top, A s’allonge, B s’allonge sur son dos, puis on renverse · A en boule, B épouse la boule dos contre dos · A à 4 pattes, B s’allonge dessus.</td></tr></table>
   <div class="pcards">${["figures-deux","contrepoids","echauffement-banc","echauffement-banc-2"].map(imgHTML).join("")}</div>
+  <h3>Échauffement musculaire en duo</h3><p>27 exercices à deux, à piocher pour l’échauffement mené par les élèves (S5 à S8). On inverse les rôles à chaque série.</p>
+  ${Object.keys(DUO_CAT).map(k => `<h4>${esc(DUO_CAT[k])}</h4>${duoHTML(DUO.filter(d => d.cat === k).map(d => d.id))}`).join("")}
   <h3>Échauffement autonome de groupe (S5 à S8)</h3><div class="actions noprint"><button class="btn ghost" type="button" data-print="echauffement">Imprimer la fiche</button><a class="btn ghost" href="${PDF("echauffement")}">PDF</a></div>${echHTML()}`;
 function secuHTML(){
   return `<h3>Tenue</h3><ul>${SECU.tenue.map(x => `<li>${esc(x)}</li>`).join("")}</ul>
