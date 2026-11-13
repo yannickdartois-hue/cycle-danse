@@ -1,7 +1,7 @@
 /* Cycle danse : l'outil et ses PDF sont mis en cache à la 1re ouverture (Wi-Fi), puis fonctionnent sans réseau. */
-const C='cycle-danse-v1';
+const C='cycle-danse-v1.0';
 // Toutes les applis partagent le même stockage (même adresse github.io) : on n'efface QUE les anciennes versions de CETTE appli.
-const MES_CACHES=/^(?:cycle\-danse\-v)\d+$/;
+const MES_CACHES=/^(?:cycle\-danse\-v)\d+(?:\.\d+)?$/;
 
 // Wi-Fi faible au gymnase : si le réseau ne répond pas en 3 s, on ouvre la copie gardée sur l'appareil.
 const sous3s=p=>{p.catch(()=>{});return Promise.race([p,new Promise((_,non)=>setTimeout(()=>non(new Error('réseau lent')),3000))])};
