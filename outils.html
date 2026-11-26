@@ -523,7 +523,10 @@ document.addEventListener("change", e => {
 let TM = null;
 function beep(f, d){ try{ const A = new (window.AudioContext || window.webkitAudioContext)(), o = A.createOscillator(); o.frequency.value = f; o.connect(A.destination); o.start(); setTimeout(() => { o.stop(); A.close(); }, d); }catch(e){} }
 function startTimer(min, lab){ stopTimer(); const fin = Date.now() + min * 60000; $("#timer").hidden = false; $("#tm-lab").textContent = lab;
-  const tick = () => { const r = Math.max(0, Math.round((fin - Date.now()) / 1000)); $("#tm-t").textContent = String(Math.floor(r / 60)).padStart(2, "0") + ":" + String(r % 60).padStart(2, "0"); if(r === 30) beep(660, 150); if(r <= 0){ beep(880, 700); clearInterval(TM); TM = null; } };
+  /* signal « 30 s » : déclenché au PASSAGE sous 30 s (avant : seulement si un tic tombait pile sur 30, il pouvait être sauté) ;
+     s'il est passé pendant une mise en veille (plus de 2 s de retard), on ne le joue plus */
+  let alerte30 = min * 60 <= 30;
+  const tick = () => { const r = Math.max(0, Math.round((fin - Date.now()) / 1000)); $("#tm-t").textContent = String(Math.floor(r / 60)).padStart(2, "0") + ":" + String(r % 60).padStart(2, "0"); if(!alerte30 && r <= 30){ alerte30 = true; if(r >= 28) beep(660, 150); } if(r <= 0){ beep(880, 700); clearInterval(TM); TM = null; } };
   tick(); TM = setInterval(tick, 1000); }
 function stopTimer(){ if(TM) clearInterval(TM); TM = null; $("#timer").hidden = true; }
 
